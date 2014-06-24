@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Factorio Calc</title>
+	<script type="text/javascript">
+		DATALIBS = [
+			'core-0-10-0',
+			'core-0-9-8',
+		]
+	</script>
+	<script type="text/javascript" src="lua.vm.js"></script>
+	<script type="text/javascript" src="rendering.js"></script>
+	<script src="http://fb.me/react-0.10.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+	<script type="text/lua">
+		if #window.location.hash == 0 then
+			window.location.hash = '#core-0-10-0'
+		end
+		datalib = window.location.hash:sub(2)
+		
+		require('dataloader')
+		require('data.'..datalib)
+		require('calc')
+		js.global:render(data.raw.recipe)
+	</script>
+	
+</head>
+<body>
+<ul>
+	<li><a href="./#core-0-10-0">core-0.10.0</a></li>
+	<li><a href="./#core-0-9-8">core-0.9.8</a></li>
+	<div id="example"></div>
+	<script type="text/jsx">
+
+      /** @jsx React.DOM */
+
+      var HelloWorld = React.createClass({
+        render: function() {
+          return (
+            <p>
+              Hello, <input type="text" placeholder="Your name here" />!
+              It is {this.props.date.toTimeString()}
+            </p>
+          );
+        }
+      });
+
+      setInterval(function() {
+        React.renderComponent(
+          <HelloWorld date={new Date()} />,
+          document.getElementById('example')
+        );
+      }, 500);
+
+    </script>
+</ul>
+
+</body>
+</html>
