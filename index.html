@@ -26,8 +26,11 @@
 		require('data.'..datalib)
 		require('calc')
 		require('ffi')
-
 		js.global:renderCalc(to_js_val(data.raw.recipe))
+		function calc_request(recipe, ips)
+			return to_js_val(request(tostring(recipe), ips))
+		end
+		js.global.calcRequest = calc_request
 	</script>
 	
 </head>

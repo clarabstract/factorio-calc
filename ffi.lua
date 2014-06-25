@@ -3,10 +3,10 @@ function to_js_val(tbl)
 		return tbl -- it's probably fine as is
 	end
 	-- quick'n'dirty check if table is array-like
-	if type(tbl[1]) == 'number' then
+	if tbl[1] then
 		local arr = js.global.lua_ffi:new_js_array()
 		for i,v in ipairs(tbl) do
-			js.global.lua_ffi.push_to_array(arr, to_js_val(v))
+			js.global.lua_ffi:push_to_array(arr, to_js_val(v))
 		end
 		return arr
 	else

@@ -1,3 +1,55 @@
 body {
 	padding:1em;
 }
+#recipe {
+	width: 20em;
+}
+#ips {
+	width: 3em;
+	text-align:right;
+}
+
+#calc input {
+	margin: 0 0.5em;
+	font-family: monospace;
+}
+.req {
+	font-size: 12px;
+	color:#999;
+	line-height: 25px;
+}
+.req > div, .req .recipe-info > div, .req .data > div {
+	display: inline;
+	margin-right:1em;
+}
+.req .data {
+	display: inline-block !important;
+	position: absolute;
+	left: 20%;
+	height: 25px;
+	overflow: hidden;
+}
+.req .val {
+	font-family: monospace;
+	font-size: 16px;
+	color:#000;
+	padding: 0 0.5em;
+	display: inline-block;
+	width: 4em;
+	text-align: right;
+}
+.req .name {
+	font-family: monospace;
+	font-weight: bold;
+	padding-right:1em;
+	font-size: 16px;
+	color:#000;
+	width:25%;
+}
+
+.req .inputs {
+	display: block !important;
+	margin-left:2em;
+	padding-left: 1em;
+	border-left:1px dotted #ccc;
+}
