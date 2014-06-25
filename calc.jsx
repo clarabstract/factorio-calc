@@ -11,11 +11,11 @@ var Calc = React.createClass({
     window.location.reload();
   },
   calculate: function() {
-    req = window.calcRequest.call(this.state.recipe, this.state.ips)
+    req = window.calcRequest.call(this.state.recipe, parseFloat(this.state.ips))
     this.setState({result: req})
   },
   setIPS: function(ev) {
-    this.setState({ips:Number(ev.target.value)}, this.calculate)
+    this.setState({ips:ev.target.value}, this.calculate)
 
   },
   setRecipe: function(ev) {
@@ -58,6 +58,8 @@ var Calc = React.createClass({
           <input
             id="ips"
             type="number"
+            min="0"
+            step="any"
             value={this.state.ips}
             onChange={this.setIPS}/>
           item(s) / second.
