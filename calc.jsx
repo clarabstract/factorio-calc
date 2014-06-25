@@ -2,7 +2,7 @@
 var Calc = React.createClass({
   getInitialState: function() {
     return {
-      recipe: 'basic-grenade',
+      recipe: null,
       ips: 1,
     };
   },
