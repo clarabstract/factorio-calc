@@ -1,6 +1,12 @@
 body {
 	padding:1em;
 }
+header .pull-right {
+	padding-right: 130px;
+}
+header .pull-right select {
+	margin-left:1em;
+}
 #recipe {
 	width: 20em;
 }
