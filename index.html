@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="calc.css">
     <script type="text/jsx" src="calc.jsx"></script>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-	<script type="text/lua">
+    <script type="text/lua">
 		if #window.location.hash == 0 then
 			window.location.hash = '#core-0-10-0'
 		end
@@ -29,8 +29,8 @@
 		require('calc')
 		require('ffi')
 		js.global:renderCalc(to_js_val(data.raw.recipe))
-		function calc_request(recipe, ips)
-			return to_js_val(request(tostring(recipe), ips))
+		function calc_request(recipe, ips, opts)
+			return to_js_val(request(tostring(recipe), ips, opts))
 		end
 		js.global.calcRequest = calc_request
 	</script>

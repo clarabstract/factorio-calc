@@ -4,6 +4,10 @@ var Calc = React.createClass({
     return {
       recipe: 'science-pack-2',
       ips: 1,
+      opts: {
+        asslvl: "0.5",
+        smeltlvl: "1",
+      }
     };
   },
   changeDataLib: function(ev) {
@@ -11,7 +15,7 @@ var Calc = React.createClass({
     window.location.reload();
   },
   calculate: function() {
-    req = window.calcRequest.call(this.state.recipe, parseFloat(this.state.ips))
+    req = window.calcRequest.call(this.state.recipe, parseFloat(this.state.ips), this.state.opts)
     this.setState({result: req})
   },
   setIPS: function(ev) {
@@ -20,6 +24,11 @@ var Calc = React.createClass({
   },
   setRecipe: function(ev) {
     this.setState({recipe:ev.target.value}, this.calculate)
+  },
+  setOption: function(ev) {
+    var state = {opts:this.state.opts};
+    state.opts[ev.target.name] = ev.target.value;
+    this.setState(state, this.calculate);
   },
   getSubtotals: function(req, subtotals) {
     if (!subtotals) {
@@ -37,7 +46,6 @@ var Calc = React.createClass({
     var sub = subtotals[req.name];
     sub.ips += req.ips;
     sub.assemblers = sub.ips / sub.ipspa;
-    console.log(sub)
     sub.lines_required = sub.assemblers / Math.floor(sub.assembler_max_line);
     if (req.inputs) {
       for (var i = req.inputs.length - 1; i >= 0; i--) {
@@ -45,6 +53,14 @@ var Calc = React.createClass({
       };
     };
     return subtotals;
+  },
+  showOptions: function(ev) {
+    ev.preventDefault();
+    this.setState({showOptions: true});
+  },
+  hideOptions: function(ev) {
+    ev.preventDefault();
+    this.setState({showOptions: false});
   },
   render: function() {
     var result, subtotals;
@@ -56,6 +72,49 @@ var Calc = React.createClass({
         subtotals.push(<Req req={subs[n]} />);
       }
 
+    }
+    var options;
+    if (this.state.showOptions) {
+      options = (
+        <p>
+          <a onClick={this.hideOptions} href="">
+            <span className="glyphicon glyphicon-collapse-down"></span>
+            Hide options
+          </a>
+          <div id="options">
+            <label>Assembler level:
+              <select
+                value={this.state.opts.asslvl}
+                name="asslvl"
+                onChange={this.setOption}>
+                <option value="0.5">1 (0.5 modifier)</option>
+                <option value="0.75">2 (0.75 modifier)</option>
+                <option value="1.25">3 (1.25 modifier)</option>
+              </select>
+            </label>
+            <label>Smelter level:
+              <select
+                value={this.state.opts.smeltlvl}
+                name="smeltlvl"
+                onChange={this.setOption}>
+                <option value="1">Stone</option>
+                <option value="2">Steel / Electric</option>
+              </select>
+            </label>
+          </div>
+        </p>
+      );
+     
+    } else {
+      options = (
+        <p>
+          <a onClick={this.showOptions} href="">
+            <span className="glyphicon glyphicon-expand"></span>
+            Show options
+          </a>
+          
+        </p>
+      );
     }
     return (
     	<div>
@@ -95,6 +154,7 @@ var Calc = React.createClass({
             onChange={this.setIPS}/>
           item(s) / second.
         </p>
+        {options}
         {result}
         <h2>Sub-totals</h2>
         {subtotals}

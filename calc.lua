@@ -1,6 +1,6 @@
 
 
-function get_recipe(name)
+function get_recipe(name, options)
 	local rdata = data.raw.recipe[name]
 	local recipe = {}
 	if not rdata then
@@ -9,7 +9,10 @@ function get_recipe(name)
 	recipe.name = rdata.name
 	recipe.time = rdata.energy_required or 0.5
 	if rdata.category == 'smelting' then
-		recipe.time = recipe.time / 2
+		console(options.smeltlvl)
+		recipe.time = recipe.time / tonumber(options.smeltlvl)
+	else
+		recipe.time = recipe.time / tonumber(options.asslvl)
 	end
 	recipe.outputs = rdata.result_count or 1
 	recipe.ips = recipe.outputs / recipe.time
@@ -30,16 +33,19 @@ end
 
 local BELT_THROUGHPUT = 14.2 -- wiki measure is 14.8, but mine is closer to 14
 
-function request(name, ips)
-	local recipe = get_recipe(name)
+function request(name, ips, options)
+	local recipe = get_recipe(name, options)
 	if not recipe then
 		return {name = name, ips=ips, lines_required=(BELT_THROUGHPUT/ips)}
+	end
+	if not options then
+		options = {asslvl = 1, smeltlvl=1}
 	end
 	local req = {}
 	req.name = recipe.name
 	req.ips = ips
-	req.ipspa = recipe.ips
-	req.assemblers = req.ips / recipe.ips
+	req.ipspa = recipe.ips 
+	req.assemblers = req.ips / req.ipspa
 	req.assembler_max_line = BELT_THROUGHPUT / recipe.ips
 	req.lines_required = req.assemblers / math.floor(req.assembler_max_line)
 	req.cycle_time = recipe.time
@@ -48,7 +54,7 @@ function request(name, ips)
 		local ingr_per_cycle = input.amount * req.assemblers
 		local ingr_required_ips = ingr_per_cycle /  req.cycle_time
 		table.insert(req.inputs,
-			request(input.name, ingr_required_ips))
+			request(input.name, ingr_required_ips, options))
 	end
 	return req
 end
