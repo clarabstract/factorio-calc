@@ -2,7 +2,7 @@
 var Calc = React.createClass({
   getInitialState: function() {
     return {
-      recipe: null,
+      recipe: 'science-pack-2',
       ips: 1,
     };
   },
@@ -21,10 +21,41 @@ var Calc = React.createClass({
   setRecipe: function(ev) {
     this.setState({recipe:ev.target.value}, this.calculate)
   },
+  getSubtotals: function(req, subtotals) {
+    if (!subtotals) {
+      subtotals = {}
+    }
+    if (!subtotals[req.name]) {
+      subtotals[req.name] = {
+        name: req.name,
+        ips: 0,
+        ipspa: req.ipspa,
+        assembler_max_line: req.assembler_max_line,
+        cycle_time: req.cycle_time,
+      }
+    }
+    var sub = subtotals[req.name];
+    sub.ips += req.ips;
+    sub.assemblers = sub.ips / sub.ipspa;
+    console.log(sub)
+    sub.lines_required = sub.assemblers / Math.floor(sub.assembler_max_line);
+    if (req.inputs) {
+      for (var i = req.inputs.length - 1; i >= 0; i--) {
+        this.getSubtotals(req.inputs[i], subtotals);
+      };
+    };
+    return subtotals;
+  },
   render: function() {
-    var result;
+    var result, subtotals;
     if (this.state.result) {
       result = <Req req={this.state.result}/>;
+      subs = this.getSubtotals(this.state.result);
+      subtotals = [];
+      for( n in subs ) {
+        subtotals.push(<Req req={subs[n]} />);
+      }
+
     }
     return (
     	<div>
@@ -65,6 +96,8 @@ var Calc = React.createClass({
           item(s) / second.
         </p>
         {result}
+        <h2>Sub-totals</h2>
+        {subtotals}
     </div>
     );
   }
@@ -113,13 +146,7 @@ var Req = React.createClass({
         </div>
       ];
     } else {
-      details = (
-        <div className="lines_required">
-          on
-          <span className="val">{this.props.req.lines_required.toFixed(2)}</span>
-          assembly lines
-        </div>
-      );
+      details = null;
     }
     return (
       <div className="req">

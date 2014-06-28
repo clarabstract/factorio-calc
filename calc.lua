@@ -9,7 +9,7 @@ function get_recipe(name)
 	recipe.name = rdata.name
 	recipe.time = rdata.energy_required or 0.5
 	if rdata.category == 'smelting' then
-		-- recipe.time = recipe.time / 2
+		recipe.time = recipe.time / 2
 	end
 	recipe.outputs = rdata.result_count or 1
 	recipe.ips = recipe.outputs / recipe.time
