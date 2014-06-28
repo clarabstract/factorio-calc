@@ -31,22 +31,22 @@ function get_recipe(name, options)
 	return recipe
 end
 
-local BELT_THROUGHPUT = 14.2 -- wiki measure is 14.8, but mine is closer to 14
 
 function request(name, ips, options)
 	local recipe = get_recipe(name, options)
-	if not recipe then
-		return {name = name, ips=ips, lines_required=(BELT_THROUGHPUT/ips)}
-	end
 	if not options then
-		options = {asslvl = 1, smeltlvl=1}
+		options = {asslvl = 1, smeltlvl = 1, beltlvl = 14.2}
 	end
+	if not recipe then
+		return {name = name, ips=ips}
+	end
+	
 	local req = {}
 	req.name = recipe.name
 	req.ips = ips
 	req.ipspa = recipe.ips 
 	req.assemblers = req.ips / req.ipspa
-	req.assembler_max_line = BELT_THROUGHPUT / recipe.ips
+	req.assembler_max_line = tonumber(options.beltlvl) / recipe.ips
 	req.lines_required = req.assemblers / math.floor(req.assembler_max_line)
 	req.cycle_time = recipe.time
 	req.inputs = {}
