@@ -59,3 +59,8 @@ header .pull-right select {
 	padding-left: 1em;
 	border-left:1px dotted #ccc;
 }
+
+.req .assemblers .val{
+	font-weight: bold;
+	color:#CC7A00;
+}
