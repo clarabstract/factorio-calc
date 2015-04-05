@@ -1,4 +1,88 @@
 /** @jsx React.DOM */
+// react component
+
+// Create the input graph
+
+
+update = function(props) {
+    return function(me) {
+      var g = new dagreD3.graphlib.Graph()
+        .setGraph({})
+        .setDefaultEdgeLabel(function() { return {}; });
+
+      // Here we"re setting nodeclass, which is used by our custom drawNodes function
+      // below.
+      var i = 0;
+      
+      var dict = {};
+      var visit = function (inp, k) {
+        console.log(inp.name + ' ' + k);
+        dict[inp.name] = k;
+        g.setNode(k, { label: inp.name, class: "type-TOP"});
+        if (inp.inputs && inp.inputs.length) {
+          for (var j = 0; j < inp.inputs.length; j++) {
+            if(!(inp.inputs[j].name in dict)){
+              var n = ++i;
+              visit(inp.inputs[j], n);
+            }
+            if(dict[inp.inputs[j].name] != dict[inp.name]) {
+              g.setEdge(dict[inp.inputs[j].name], dict[inp.name],
+                {}); //lineInterpolate: 'linear' 
+            }
+          };
+        }
+
+      }
+      visit(props.req, 0);
+
+      // Create the renderer
+      // var renderer = new dagreD3.Renderer().edgeInterpolate("linear");
+
+      var render = new dagreD3.render();
+
+      // render.edgeInterpolate("linear");
+      // Set up an SVG group so that we can translate the final graph.
+      // var svg = d3.select("svg"),
+          // svgGroup = svg.append("g");
+
+      // Run the renderer. This is what draws the final graph.
+      render(me, g);
+
+      var svgGroup = me;
+      var svg = d3.select("svg");
+      // Center the graph
+      var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+      svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+      svg.attr("height", g.graph().height + 40);
+
+        // me
+        //     .attr("cx", 3 + props.r)
+        //     .attr("cy", 3 + props.r)
+        //     .attr("r", props.r)
+        //     .attr("fill", props.color);
+    };
+};
+
+var Graph = React.createClass({
+    render: function() {
+        return <svg width="960" height="600"></svg>;
+    },
+    componentDidMount: function () {
+        d3.select(this.getDOMNode())
+            .append("g")
+            .call(update(this.props));
+    },
+    shouldComponentUpdate: function(props) {
+        d3.select(this.getDOMNode())
+            .select("g")
+            .call(update(props));
+
+        // always skip React's render step
+        return false;
+    }
+});
+
+
 var Calc = React.createClass({
   getInitialState: function() {
     return {
@@ -55,6 +139,10 @@ var Calc = React.createClass({
     };
     return subtotals;
   },
+  getGraph: function(result) {
+    return <Graph req={result} />;
+  },
+
   showOptions: function(ev) {
     ev.preventDefault();
     this.setState({showOptions: true});
@@ -64,7 +152,7 @@ var Calc = React.createClass({
     this.setState({showOptions: false});
   },
   render: function() {
-    var result, subtotals;
+    var result, subtotals, layout;
     if (this.state.result) {
       result = <Req req={this.state.result}/>;
       subs = this.getSubtotals(this.state.result);
@@ -72,7 +160,7 @@ var Calc = React.createClass({
       for( n in subs ) {
         subtotals.push(<Req req={subs[n]} />);
       }
-
+      layout = this.getGraph(this.state.result);
     }
     var options;
     if (this.state.showOptions) {
@@ -172,6 +260,8 @@ var Calc = React.createClass({
         {result}
         <h2>Sub-totals</h2>
         {subtotals}
+        <h2>Layout</h2>
+        {layout}
     </div>
     );
   }
