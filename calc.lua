@@ -11,10 +11,22 @@ function get_recipe(name, options)
 	if rdata.category == 'smelting' then
 		console(options.smeltlvl)
 		recipe.time = recipe.time / tonumber(options.smeltlvl)
+		recipe.outputs = rdata.result_count or 1
+	elseif rdata.category == 'chemistry' then
+		recipe.time = recipe.time / 1.25
+		if rdata.results then
+			for i, res in ipairs(rdata.results) do
+				if res.name == recipe.name then
+					recipe.outputs = res.amount
+				end
+			end
+		else 
+			recipe.outputs = 1
+		end
 	else
 		recipe.time = recipe.time / tonumber(options.asslvl)
+		recipe.outputs = rdata.result_count or 1
 	end
-	recipe.outputs = rdata.result_count or 1
 	recipe.ips = recipe.outputs / recipe.time
 	recipe.inputs = {}
 	for i, ingr in ipairs(rdata.ingredients) do
