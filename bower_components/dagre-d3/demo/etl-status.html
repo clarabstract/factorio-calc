@@ -4,7 +4,7 @@
 <title>Dagre D3 Renderer Demo</title>
 
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="../build/dagre-d3.js"></script>
+<script src="../build/dist/dagre-d3.js"></script>
 
 <style>
 
@@ -246,12 +246,11 @@
     inner.call(render, g);
 
     // Zoom and scale to fit
-    var zoomScale = zoom.scale();
     var graphWidth = g.graph().width + 80;
     var graphHeight = g.graph().height + 40;
     var width = parseInt(svg.style("width").replace(/px/, ""));
     var height = parseInt(svg.style("height").replace(/px/, ""));
-    zoomScale = Math.min(width / graphWidth, height / graphHeight);
+    var zoomScale = Math.min(width / graphWidth, height / graphHeight);
     var translate = [(width/2) - ((graphWidth*zoomScale)/2), (height/2) - ((graphHeight*zoomScale)/2)];
     zoom.translate(translate);
     zoom.scale(zoomScale);
