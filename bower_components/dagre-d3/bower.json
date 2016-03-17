@@ -1,9 +1,8 @@
 {
   "name": "dagre-d3",
-  "version": "0.4.3",
+  "version": "0.4.17",
   "main": [
-    "dist/dagre-d3.core.js",
-    "dist/dagre-d3.core.min.js"
+    "dist/dagre-d3.core.js"
   ],
   "ignore": [
     ".*",
@@ -11,8 +10,10 @@
     "CHANGELOG.md",
     "Makefile",
     "browser.js",
+    "build/**",
     "dist/dagre-d3.js",
     "dist/dagre-d3.min.js",
+    "dist/dagre-d3.min.js.map",
     "dist/demo/**",
     "index.js",
     "karma*",
@@ -23,8 +24,8 @@
   ],
   "dependencies": {
     "d3": "^3.3.8",
-    "dagre": "^0.7.1",
-    "graphlib": "^1.0.1",
-    "lodash": "^2.4.1"
+    "dagre": "^0.7.3",
+    "graphlib": "^1.0.5",
+    "lodash": "^3.10.0"
   }
 }
