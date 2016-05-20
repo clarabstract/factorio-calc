@@ -65,7 +65,7 @@ update = function(props) {
 
 var Graph = React.createClass({
     render: function() {
-        return <svg width="960" height="600"></svg>;
+        return <svg width="100%" height="600"></svg>;
     },
     componentDidMount: function () {
         d3.select(this.getDOMNode())
