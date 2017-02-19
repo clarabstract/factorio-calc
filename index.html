@@ -1,24 +1,32 @@
 <!DOCTYPE html> <html> <head>
 	<title>Factorio Calc</title>
 	<script type="text/javascript">
-		DATALIBS = [
+		window.DATALIBS = [
 			'core-0-14-20',
 			'core-0-12-33',
 			'core-0-11-3',
 			'core-0-10-2',
-			'core-0-9-8',
+			'core-0-9-8'
 		];
+
+		window.App = {}
 	</script>
 	<script type="text/javascript" src="lua.vm.js"></script>
-	<script type="text/javascript" src="ffi.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.10.0/react.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.10.0/JSXTransformer.js"></script>
+	<script type="text/javascript" src="ffi.js"></script>	
+	<script src="https://unpkg.com/react@15/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
 	<script src="bower_components/d3/d3.min.js"></script>
 	<script src="bower_components/lodash/lodash.js"></script>
 	<script src="bower_components/graphlib/dist/graphlib.core.js"></script>
 	<script src="bower_components/dagre/dist/dagre.core.js"></script>
 	<script src="bower_components/dagre-d3/dist/dagre-d3.core.js"></script>
 	<link rel="stylesheet" href="calc.css">
+	<script type="text/jsx" src="datasource.jsx"></script>
+	<script type="text/jsx" src="input.jsx"></script>
+	<script type="text/jsx" src="options.jsx"></script>
+	<script type="text/jsx" src="ingredients.jsx"></script>
+	<script type="text/jsx" src="graph.jsx"></script>
 	<script type="text/jsx" src="calc.jsx"></script>
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	<script type="text/lua">

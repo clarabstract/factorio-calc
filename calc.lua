@@ -2,12 +2,23 @@
 
 function get_recipe(name, options)
 	local rdata = data.raw.recipe[name]
+
+	if name == "iron-ore" or name == "copper-ore" then
+		rdata = {}
+		rdata.name = name
+		rdata.energy_required = 1 / 0.525
+		rdata.category = "ore"
+		rdata.ingredients = {}
+	end
+
 	local recipe = {}
 	if not rdata then
+		console("No data found for "..name)
 		return rdata
 	end
 	recipe.name = rdata.name
 	recipe.time = rdata.energy_required or 0.5
+	recipe.category = rdata.category
 	if rdata.category == 'smelting' then
 		console(options.smeltlvl)
 		recipe.time = recipe.time / tonumber(options.smeltlvl)
@@ -23,6 +34,8 @@ function get_recipe(name, options)
 		else 
 			recipe.outputs = 1
 		end
+	elseif rdata.category == 'ore' then
+		recipe.outputs = 1
 	else
 		recipe.time = recipe.time / tonumber(options.asslvl)
 		recipe.outputs = rdata.result_count or 1
@@ -61,6 +74,7 @@ function request(name, ips, options)
 	req.assembler_max_line = tonumber(options.beltlvl) / recipe.ips
 	req.lines_required = req.assemblers / math.floor(req.assembler_max_line)
 	req.cycle_time = recipe.time
+	req.category = recipe.category
 	req.inputs = {}
 	for i, input in ipairs(recipe.inputs) do
 		local ingr_per_cycle = input.amount * req.assemblers
