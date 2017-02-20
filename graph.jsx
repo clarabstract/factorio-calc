@@ -11,18 +11,19 @@ var update = function(props) {
       var i = 0;
       
       var dict = {};
-      var visit = function (inp, k) {
-        console.log(inp.name + ' ' + k);
-        dict[inp.name] = k;
-        g.setNode(k, { label: inp.name, class: "type-TOP"});
-        if (inp.inputs && inp.inputs.length) {
-          for (var j = 0; j < inp.inputs.length; j++) {
-            if(!(inp.inputs[j].name in dict)){
+      var visit = function (recipe, k) {
+        console.log(recipe.name + ' ' + k);
+        dict[recipe.name] = k;
+        g.setNode(k, { label: recipe.name, class: "type-TOP"});
+        if (recipe.ingredients && recipe.ingredients.length) {
+          for (var j = 0; j < recipe.ingredients.length; j++) {
+            var ingredient = recipe.ingredients[j];
+            if(!(ingredient.name in dict)){
               var n = ++i;
-              visit(inp.inputs[j], n);
+              visit(ingredient.recipe, n);
             }
-            if(dict[inp.inputs[j].name] != dict[inp.name]) {
-              g.setEdge(dict[inp.inputs[j].name], dict[inp.name],
+            if(dict[ingredient.name] != dict[recipe.name]) {
+              g.setEdge(dict[ingredient.name], dict[recipe.name],
                 {}); //lineInterpolate: 'linear' 
             }
           }
@@ -30,7 +31,7 @@ var update = function(props) {
 
       };
       if (props.req) {
-        visit(props.req, 0);
+        visit(props.req.recipe, 0);
       }
 
       // Create the renderer

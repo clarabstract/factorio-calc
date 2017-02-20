@@ -3,16 +3,16 @@
 var Ingredients = React.createClass({
   render: function() {
     var inputs, details;
-    if (this.props.req.inputs && this.props.req.inputs.length) {
+    if (this.props.req.ingredients && this.props.req.ingredients.length) {
       inputs = (
         <div className="inputs">
-          {this.props.req.inputs.map(function(input){
-            return <Ingredients req={input} />;
+          {this.props.req.ingredients.map(function(ingredient){
+            return <Ingredients req={ingredient.recipe} />;
           })}
         </div>
       );
     }
-    if (this.props.req.assemblers) {
+    if (this.props.req.assemblersRequired) {
       var madeBy = "assemblers";
       if (this.props.req.category == "ore") {
         madeBy = "drills";
@@ -25,28 +25,28 @@ var Ingredients = React.createClass({
       details = [
         <div className="assemblers">
           requires
-          <span className="val">{this.props.req.assemblers.toFixed(2)}</span>
+          <span className="val">{this.props.req.assemblersRequired.toFixed(2)}</span>
           {madeBy}
         </div>,
         <div className="lines_required">
           on
-          <span className="val">{this.props.req.lines_required.toFixed(2)}</span>
+          <span className="val">{this.props.req.lines.toFixed(2)}</span>
           assembly lines
         </div>,
         <div className="recipe-info">
           (
           <div className="assembler_max_line">
-            <span className="val">{this.props.req.assembler_max_line.toFixed(2)}</span>
+            <span className="val">{this.props.req.assemblersPerLine.toFixed(2)}</span>
             max {madeBy} per line
           </div>
           -
           <div className="cycle_time">
             cycles every
-            <span className="val">{this.props.req.cycle_time.toFixed(2)}s</span>
+            <span className="val">{this.props.req.assemblyTime.toFixed(2)}s</span>
           </div>
           <div className="ipspa">
             @
-            <span className="val">{this.props.req.ipspa.toFixed(2)}</span>i/s
+            <span className="val">{(1 / this.props.req.assemblyTime).toFixed(2)}</span>i/s
           </div>
           )
         </div>
@@ -59,7 +59,7 @@ var Ingredients = React.createClass({
         <div className="name">{this.props.req.name}</div>
         <div className="data">
           <div className="ips">@
-            <span className="val ips-val">{this.props.req.ips}</span>
+            <span className="val ips-val">{this.props.req.ips.toFixed(2)}</span>
             items/sec
             (or 
             <span className="val spi-val">{(1.0 / this.props.req.ips).toFixed(2)}</span>

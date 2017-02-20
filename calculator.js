@@ -1,131 +1,138 @@
-/* global App*/
+/* global App, _*/
 
 App.Calculator = {
 
-	doCalculation: function(recipe, ips, options) {
-		return this._request(recipe, ips, options);
+	calculateAndAnalyze: function(recipeName, ips, options) {
+		var recipe = this._getRecipeTree(recipeName, ips);
+		this._addAnalyis(recipe, options);
+
+		var totals = this._getRecipeTreeTotals(recipe);
+		var self = this;	
+		totals.forEach(function (total) {
+			self._addAnalyis(total, options);
+		});
+
+		return {recipe: recipe, totals: totals};
 	},
 
-	_get_recipe: function(name, options) {
-		var rdata = App.getRawRecipe.call(name);
-		console.log("_get_recipe: " + name);
+	_addAnalyis: function(recipe, options) {
+		var assemblyInfo = this._getAssemblyInfoForRecipe(recipe, options);
+		var assemblyLineInfo = this._getAssemblyLinesInfoForRecipe(recipe, assemblyInfo, options);
+		_.defaults(recipe, assemblyInfo);
+		_.defaults(recipe, assemblyLineInfo);
+		var self = this;
+		(recipe.ingredients || []).forEach(function(ingredient) {
+			self._addAnalyis(ingredient.recipe, options);
+		});
+	},
+
+	_asArray: function(object) {
+		return _.isArray(object) ? object: [];
+	},
+
+
+	_getRecipe: function(name) {
+		var rawData = App.getRawRecipe.call(name);
 
 		if (name == "iron-ore" || name == "copper-ore") {
-			rdata = {};
-			rdata.name = name;
-			rdata.energy_required = 1 / 0.525;
-			rdata.category = "ore";
-			rdata.ingredients = [];
+			rawData = {};
+			rawData.name = name;
+			rawData.energy_required = 1 / 0.525;
+			rawData.category = "ore";
+			rawData.ingredients = [];
 		}
 
 		var recipe = {};
-		if (!rdata) {
+		if (!rawData) {
 			console.log("No data found for " + name);
-			return rdata;
+			return {
+				name: name,
+				category: "unknown",
+				ingredients: []
+			};
 		}
-		recipe.name = rdata.name;
-		recipe.time = rdata.energy_required || 0.5;
-		recipe.category = rdata.category;
-		if (rdata.category == 'smelting') {
-			console.log(options.smeltlvl);
-			recipe.time = recipe.time / parseFloat(options.smeltlvl);
-			recipe.outputs = rdata.result_count || 1;
+		recipe.name = rawData.name;
+		recipe.baseTime = rawData.energy_required || 0.5;
+		recipe.category = rawData.category;
+
+		if (rawData.results) {
+			var selfResult = _.findWhere(rawData.results, {name: recipe.name});
+			recipe.outputs = selfResult ? selfResult.amount : 1;
+		} else {
+			recipe.outputs = rawData.result_count || 1;
 		}
-		else if (rdata.category == 'chemistry') {
-			recipe.time = recipe.time / 1.25;
-			if (rdata.results && rdata.results.forEach) {
-				rdata.results.forEach(function(res) {
-					if (res.name == recipe.name) {
-						recipe.outputs = res.amount;
-					}
-				});
+
+		recipe.ingredients = this._asArray(rawData.ingredients).map(function(rawIngredient) {
+			if (rawIngredient.name) {
+				return {name: rawIngredient.name, amount: rawIngredient.amount};
+			} else {
+				return {name: rawIngredient[0], amount: rawIngredient[1]};
 			}
-			else {
-				recipe.outputs = 1;
-			}
-		}
-		else if (rdata.category == 'ore') {
-			recipe.outputs = 1;
-		}
-		else {
-			recipe.time = recipe.time / parseFloat(options.asslvl);
-			recipe.outputs = rdata.result_count || 1;
-		}
-		recipe.ips = recipe.outputs / recipe.time;
-		recipe.inputs = [];
-		if (rdata.ingredients.forEach) {
-			rdata.ingredients.forEach(function(ingr) {
-				var ingredient = {};
-				if (ingr.name) {
-					ingredient.name = ingr.name;
-					ingredient.amount = ingr.amount;
-				}
-				else {
-					ingredient.name = ingr[0];
-					ingredient.amount = ingr[1];
-				}
-				recipe.inputs.push(ingredient);
-			});
-		}
+		});
+	
 		return recipe;
 	},
 
-	_request: function(name, ips, options) {
-
-		var recipe = this._get_recipe(name, options);
-		if (!options) {
-			options = {asslvl: 1, smeltlvl: 1, beltlvl: 14.2};
-		}
-		if (!recipe) {
-			return {name: name, ips: ips};
-		}
-		
-		var req = {};
-		req.name = recipe.name;
-		req.ips = ips;
-		req.ipspa = recipe.ips ;
-		req.assemblers = req.ips / req.ipspa;
-		req.assembler_max_line = parseFloat(options.beltlvl) / recipe.ips;
-		req.lines_required = req.assemblers / Math.floor(req.assembler_max_line);
-		req.cycle_time = recipe.time;
-		req.category = recipe.category;
-		req.inputs = [];
+	_getRecipeTree: function(name, ips) {
+		var recipe = this._getRecipe(name);
+		recipe.ips = ips;
 		var self = this;
-		if (recipe.inputs.forEach) {
-			recipe.inputs.forEach(function(input) {
-				var ingr_per_cycle = input.amount * req.assemblers;
-				var ingr_required_ips = ingr_per_cycle /  req.cycle_time;
-				req.inputs.push(self._request(input.name, ingr_required_ips, options));
-			});
-		}
-		return req;
+		recipe.ingredients.forEach(function(ingredient) {
+			var ingredientIps = recipe.ips / recipe.outputs * ingredient.amount;
+			ingredient.recipe = self._getRecipeTree(ingredient.name, ingredientIps);
+		});
 
+		return recipe;
 	},
 
-	getSubtotals: function(req, subtotals) {
-	    if (!subtotals) {
-	    	subtotals = {};
-	    }
-	    if (!subtotals[req.name]) {
-	    	subtotals[req.name] = {
-	        	name: req.name,
-		        ips: 0,
-		        ipspa: req.ipspa,
-		        assembler_max_line: req.assembler_max_line,
-		        cycle_time: req.cycle_time,
-		        category: req.category  
-	      	};
-	    }
-	    var sub = subtotals[req.name];
-	    sub.ips += req.ips;
-	    sub.assemblers = sub.ips / sub.ipspa;
-	    sub.lines_required = sub.assemblers / Math.floor(sub.assembler_max_line);
-	    if (req.inputs) {
-	    	for (var i = req.inputs.length - 1; i >= 0; i--) {
-	    		this.getSubtotals(req.inputs[i], subtotals);
-	      	}
-	    }
-	    return subtotals;
-  }
+	_getRecipeTreeTotals: function(recipe) {
+		var self = this;
+		var allSubtotals = _.flatten(_.map(recipe.ingredients, function(ingredient) {
+			return self._getRecipeTreeTotals(ingredient.recipe);
+		}));
+		allSubtotals.unshift(recipe);
+		var groupedSubtotals = _.groupBy(allSubtotals, "name");
+
+		var finalTotals = _.map(groupedSubtotals, function(subtotalsForName, name) {
+			var total = _.clone(subtotalsForName[0]);
+			delete total.ingredients;
+			total.ips = _.sum(subtotalsForName, "ips");
+
+			return total;
+		});
+
+		return finalTotals;
+	},
+
+	_getAssemblyInfoForRecipe: function(recipe, options) {
+
+		var assemblyTime;
+
+		if (recipe.category == 'smelting') {
+			assemblyTime = recipe.baseTime / parseFloat(options.smeltlvl);
+		}
+		else if (recipe.category == 'chemistry') {
+			assemblyTime = recipe.baseTime / 1.25;
+		}
+		else if (recipe.category == 'ore') {
+			assemblyTime = recipe.baseTime;
+		}
+		else {
+			assemblyTime = recipe.baseTime / parseFloat(options.asslvl);
+		}
+
+		var oneAssemblerRate = recipe.outputs / assemblyTime;
+		var assembersRequired = recipe.ips / oneAssemblerRate
+
+		return {assemblersRequired: assembersRequired, assemblyTime: assemblyTime, oneAssemblerRate: oneAssemblerRate};
+	},
+
+	_getAssemblyLinesInfoForRecipe: function(recipe, assemblyInfo, options) {
+
+		var assemblersPerLine = parseFloat(options.beltlvl) * assemblyInfo.assemblyTime / recipe.outputs;
+		var lines = assemblyInfo.assemblersRequired / assemblersPerLine;
+
+		return {assemblersPerLine: assemblersPerLine, lines: lines};
+	}
 
 };

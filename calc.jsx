@@ -20,7 +20,7 @@ var Calc = React.createClass({
   },
 
   calculate: function() {
-    var req = Calculator.doCalculation(this.state.input.recipe, parseFloat(this.state.input.ips), this.state.options);
+    var req = Calculator.calculateAndAnalyze(this.state.input.recipe, parseFloat(this.state.input.ips), this.state.options);
     this.setState({result: req});
   },
 
@@ -35,12 +35,10 @@ var Calc = React.createClass({
   render: function() {
     var result, subtotals;
     if (this.state.result) {
-      result = <Ingredients req={this.state.result}/>;
-      var subs = Calculator.getSubtotals(this.state.result);
-      subtotals = [];
-      for(var n in subs ) {
-        subtotals.push(<Ingredients req={subs[n]} />);
-      }
+      result = <Ingredients req={this.state.result.recipe}/>;
+      subtotals = this.state.result.totals.map(function(total) {
+        return (<Ingredients req={total} />);    
+      });
     }
     
     return (
