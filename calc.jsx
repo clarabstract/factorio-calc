@@ -1,5 +1,6 @@
 /* global React,ReactDOM,App*/
 
+var Calculator = App.Calculator;
 var Datasource = App.Datasource;
 var Input = App.Input;
 var Options = App.Options;
@@ -19,7 +20,7 @@ var Calc = React.createClass({
   },
 
   calculate: function() {
-    var req = window.calcRequest.call(this.state.input.recipe, parseFloat(this.state.input.ips), this.state.options);
+    var req = Calculator.doCalculation(this.state.input.recipe, parseFloat(this.state.input.ips), this.state.options);
     this.setState({result: req});
   },
 
@@ -30,37 +31,12 @@ var Calc = React.createClass({
   setOptions: function(options) {
     this.setState({options: options }, this.calculate);
   },
-  getSubtotals: function(req, subtotals) {
-    if (!subtotals) {
-      subtotals = {};
-    }
-    if (!subtotals[req.name]) {
-      subtotals[req.name] = {
-        name: req.name,
-        ips: 0,
-        ipspa: req.ipspa,
-        assembler_max_line: req.assembler_max_line,
-        cycle_time: req.cycle_time,
-        category: req.category  
-      };
-    }
-    var sub = subtotals[req.name];
-    sub.ips += req.ips;
-    sub.assemblers = sub.ips / sub.ipspa;
-    sub.lines_required = sub.assemblers / Math.floor(sub.assembler_max_line);
-    if (req.inputs) {
-      for (var i = req.inputs.length - 1; i >= 0; i--) {
-        this.getSubtotals(req.inputs[i], subtotals);
-      }
-    }
-    return subtotals;
-  },
   
   render: function() {
     var result, subtotals;
     if (this.state.result) {
       result = <Ingredients req={this.state.result}/>;
-      var subs = this.getSubtotals(this.state.result);
+      var subs = Calculator.getSubtotals(this.state.result);
       subtotals = [];
       for(var n in subs ) {
         subtotals.push(<Ingredients req={subs[n]} />);

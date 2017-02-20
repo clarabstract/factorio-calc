@@ -22,6 +22,7 @@
 	<script src="bower_components/dagre/dist/dagre.core.js"></script>
 	<script src="bower_components/dagre-d3/dist/dagre-d3.core.js"></script>
 	<link rel="stylesheet" href="calc.css">
+	<script type="text/jsx" src="calculator.js"></script>
 	<script type="text/jsx" src="datasource.jsx"></script>
 	<script type="text/jsx" src="input.jsx"></script>
 	<script type="text/jsx" src="options.jsx"></script>
@@ -38,13 +39,14 @@
 
 		require('dataloader')
 		require('data.'..datalib)
-		require('calc')
 		require('ffi')
 		js.global:renderCalc(to_js_val(data.raw.recipe))
-		function calc_request(recipe, ips, opts)
-			return to_js_val(request(tostring(recipe), ips, opts))
+		
+		function js_get_raw_recipe(name)
+			return to_js_val(get_raw_recipe(tostring(name)))
 		end
-		js.global.calcRequest = calc_request
+
+		js.global.App.getRawRecipe = js_get_raw_recipe
 	</script>
 	<style>
 	/* This sets the color for "TK" nodes to a light blue green. */
