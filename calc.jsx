@@ -1,4 +1,4 @@
-/* global React,ReactDOM,App*/
+/* global React,ReactDOM,App,_*/
 
 var Calculator = App.Calculator;
 var Datasource = App.Datasource;
@@ -10,7 +10,8 @@ var Graph = App.Graph;
 var Calc = React.createClass({
   getInitialState: function() {
     return {
-      input: {recipe: null, ips: 1 },
+      input: {recipe: "", ips: 1 },
+      additionalInputs: [],
       options: {
         asslvl: "0.5",
         smeltlvl: "1",
@@ -20,12 +21,29 @@ var Calc = React.createClass({
   },
 
   calculate: function() {
-    var req = Calculator.calculateAndAnalyze(this.state.input.recipe, parseFloat(this.state.input.ips), this.state.options);
-    this.setState({result: req});
+    
+    var inputs = _.union([this.state.input], this.state.additionalInputs);
+    var result = Calculator.calculateAndAnalyze(inputs, this.state.options);
+    this.setState({result: result});
   },
 
   setInput: function(input) {
     this.setState({input:input}, this.calculate);
+  },
+
+  addAnother: function() {
+    var additionalInputs = this.state.additionalInputs.concat(this.state.input);
+    this.setState({
+      input: {recipe: "", ips: 1 },
+      additionalInputs: additionalInputs
+    }, this.calculate);
+  },
+
+  clear: function() {
+    this.setState({
+      input: {recipe: "", ips: 1 },
+      additionalInputs: []
+    }, this.calculate);
   },
 
   setOptions: function(options) {
@@ -33,9 +51,11 @@ var Calc = React.createClass({
   },
   
   render: function() {
-    var result, subtotals;
+    var results, subtotals;
     if (this.state.result) {
-      result = <Ingredients req={this.state.result.recipe}/>;
+      results = this.state.result.recipes.map(function(recipe) {
+        return (<Ingredients req={recipe} />);
+      });
       subtotals = this.state.result.totals.map(function(total) {
         return (<Ingredients req={total} />);    
       });
@@ -44,9 +64,9 @@ var Calc = React.createClass({
     return (
     	<div className="wrapper">
         <Datasource datalib={this.props.currentLib} datalibs={this.props.datalibs} />
-        <Input input={this.state.input} recipes={this.props.recipes} onChange={this.setInput}/>
+        <Input input={this.state.input} recipes={this.props.recipes} onChange={this.setInput} onAddAnother={this.addAnother} onClear={this.clear}/>
         <Options options={this.state.options} onChangeOptions={this.setOptions}/>
-        {result}
+        {results}
         <h2>Sub-totals</h2>
         {subtotals}
         <h2>Layout</h2>

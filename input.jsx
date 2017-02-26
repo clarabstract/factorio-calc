@@ -8,7 +8,7 @@ App.Input = React.createClass({
             self.props.onChange({recipe: event.target.value, ips: self.props.input.ips});
         };
         var onChangeIps = function(event) {
-            self.props.onChange({recipe: self.props.input.recipe, ips: event.target.value});
+            self.props.onChange({recipe: self.props.input.recipe, ips: parseFloat(event.target.value)});
         };
 
         return (
@@ -36,7 +36,9 @@ App.Input = React.createClass({
               value={this.props.input.ips}
               onChange={onChangeIps}/>
             item(s) / second.
-          </p>
+            <button id="addAnother" onClick={ this.props.onAddAnother }>Add Another</button>
+            <button id="clear" onClick={ this.props.onClear }>Clear</button>
+          </p>          
           </div>
         );
     }

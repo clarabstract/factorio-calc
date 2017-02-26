@@ -2,24 +2,28 @@
 
 App.Calculator = {
 
-	calculateAndAnalyze: function(recipeName, ips, options) {
-		var recipe = this._getRecipeTree(recipeName, ips);
-		this._addAnalyis(recipe, options);
-
-		var totals = this._getRecipeTreeTotals(recipe);
+	calculateAndAnalyze: function(inputs, options) {
 		var self = this;	
+
+		var recipes = _.map(inputs, function(input) {
+			var recipe = self._getRecipeTree(input.recipe, input.ips);
+			self._addAnalyis(recipe, options);
+			return recipe;
+		});
+		
+		var totals = this._getMultipleRecipeTreeTotals(recipes);
 		totals.forEach(function (total) {
 			self._addAnalyis(total, options);
 		});
 
-		return {recipe: recipe, totals: totals};
+		return {recipes: recipes, totals: totals};
 	},
 
 	_addAnalyis: function(recipe, options) {
 		var assemblyInfo = this._getAssemblyInfoForRecipe(recipe, options);
 		var assemblyLineInfo = this._getAssemblyLinesInfoForRecipe(recipe, assemblyInfo, options);
-		_.defaults(recipe, assemblyInfo);
-		_.defaults(recipe, assemblyLineInfo);
+		_.extend(recipe, assemblyInfo);
+		_.extend(recipe, assemblyLineInfo);
 		var self = this;
 		(recipe.ingredients || []).forEach(function(ingredient) {
 			self._addAnalyis(ingredient.recipe, options);
@@ -85,12 +89,26 @@ App.Calculator = {
 		return recipe;
 	},
 
+	_getMultipleRecipeTreeTotals: function(recipes) {
+		var self = this;
+		var allSubtotals = _.flatten(_.map(recipes, function(recipe) {
+			return self._getRecipeTreeTotals(recipe);
+		}));
+		
+		return this._combineTotals(allSubtotals);
+	},
+
 	_getRecipeTreeTotals: function(recipe) {
 		var self = this;
 		var allSubtotals = _.flatten(_.map(recipe.ingredients, function(ingredient) {
 			return self._getRecipeTreeTotals(ingredient.recipe);
 		}));
 		allSubtotals.unshift(recipe);
+	
+		return this._combineTotals(allSubtotals);
+	},
+
+	_combineTotals: function(allSubtotals) {
 		var groupedSubtotals = _.groupBy(allSubtotals, "name");
 
 		var finalTotals = _.map(groupedSubtotals, function(subtotalsForName, name) {

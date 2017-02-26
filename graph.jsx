@@ -12,7 +12,6 @@ var update = function(props) {
       
       var dict = {};
       var visit = function (recipe, k) {
-        console.log(recipe.name + ' ' + k);
         dict[recipe.name] = k;
         g.setNode(k, { label: recipe.name, class: "type-TOP"});
         if (recipe.ingredients && recipe.ingredients.length) {
@@ -31,7 +30,10 @@ var update = function(props) {
 
       };
       if (props.req) {
-        visit(props.req.recipe, 0);
+        props.req.recipes.forEach(function(recipe) {
+          visit(recipe, i);
+          i++;
+        });        
       }
 
       // Create the renderer
