@@ -54,10 +54,10 @@ var Calc = React.createClass({
     var results, subtotals;
     if (this.state.result) {
       results = this.state.result.recipes.map(function(recipe) {
-        return (<Ingredients req={recipe} />);
+        return (<Ingredients key={recipe.name} req={recipe} />);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients req={total} />);    
+        return (<Ingredients key={total.name} req={total} />);    
       });
     }
     

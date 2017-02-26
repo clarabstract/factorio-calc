@@ -51,7 +51,6 @@ App.Calculator = {
 
 		var recipe = {};
 		if (!rawData) {
-			console.log("No data found for " + name);
 			return {
 				name: name,
 				category: "unknown",

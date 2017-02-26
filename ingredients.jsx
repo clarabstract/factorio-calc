@@ -7,7 +7,7 @@ var Ingredients = React.createClass({
       inputs = (
         <div className="inputs">
           {this.props.req.ingredients.map(function(ingredient){
-            return <Ingredients req={ingredient.recipe} />;
+            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} />;
           })}
         </div>
       );
@@ -23,17 +23,17 @@ var Ingredients = React.createClass({
       }
 
       details = [
-        <div className="assemblers">
+        <div key="assemblers" className="assemblers">
           requires
           <span className="val">{this.props.req.assemblersRequired.toFixed(2)}</span>
           {madeBy}
         </div>,
-        <div className="lines_required">
+        <div key="lines_required" className="lines_required">
           on
           <span className="val">{this.props.req.lines.toFixed(2)}</span>
           assembly lines
         </div>,
-        <div className="recipe-info">
+        <div key="recipe-info" className="recipe-info">
           (
           <div className="assembler_max_line">
             <span className="val">{this.props.req.assemblersPerLine.toFixed(2)}</span>

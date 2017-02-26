@@ -44,12 +44,14 @@ var update = function(props) {
       // Run the renderer. This is what draws the final graph.
       render(me, g);
 
-      var svgGroup = me;
-      var svg = d3.select("svg");
-      // Center the graph
-      var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-      svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
-      svg.attr("height", g.graph().height + 40);
+      // Center the graph. Skip if graph is empty.
+      if (i > 0) {
+        var svgGroup = me;
+        var svg = d3.select("svg");
+        var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+        svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+        svg.attr("height", g.graph().height + 40);
+      }
     };
 };
 
