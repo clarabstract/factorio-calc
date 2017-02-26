@@ -5,11 +5,14 @@ App.Calculator = {
 	calculateAndAnalyze: function(inputs, options) {
 		var self = this;	
 
-		var recipes = _.map(inputs, function(input) {
+		var recipes = _.filter(_.map(inputs, function(input) {
 			var recipe = self._getRecipeTree(input.recipe, input.ips);
+			if (recipe.category == "unknown") {
+				return null;
+			}
 			self._addAnalyis(recipe, options);
 			return recipe;
-		});
+		}));
 		
 		var totals = this._getMultipleRecipeTreeTotals(recipes);
 		totals.forEach(function (total) {
