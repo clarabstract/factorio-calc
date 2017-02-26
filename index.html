@@ -42,12 +42,14 @@
 		require('ffi')
 		js.global:renderCalc(to_js_val(data.raw.recipe))
 		
-		function js_get_raw_recipe(name)
-			return to_js_val(get_raw_recipe(tostring(name)))
+		function js_get_data()
+			return to_js_val(get_data())
 		end
 
-		js.global.App.getRawRecipe = js_get_raw_recipe
+		js.global.App.getData = js_get_data
+		js.global.App.Calculator:init()
 	</script>
+	
 	<style>
 	/* This sets the color for "TK" nodes to a light blue green. */
 	g.type-TK > rect {

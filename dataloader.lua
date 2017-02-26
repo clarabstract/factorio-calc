@@ -26,7 +26,7 @@ function data.clear(self)
   end
 end
 
-function get_raw_recipe(name)
-  return data.raw.recipe[name]
+function get_data()
+  return data.raw.recipe
 end
 

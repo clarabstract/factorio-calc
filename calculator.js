@@ -2,6 +2,10 @@
 
 App.Calculator = {
 
+	init: function() {
+		this.data = App.getData.call();
+	},
+
 	calculateAndAnalyze: function(inputs, options) {
 		var self = this;	
 
@@ -39,7 +43,7 @@ App.Calculator = {
 
 
 	_getRecipe: function(name) {
-		var rawData = App.getRawRecipe.call(name);
+		var rawData = this.data[name];
 
 		if (name == "iron-ore" || name == "copper-ore") {
 			rawData = {};
