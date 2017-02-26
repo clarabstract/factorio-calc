@@ -5,10 +5,10 @@ App.Input = React.createClass({
     render: function() {
         var self = this;
         var onChangeRecipe = function(event) {
-            self.props.onChange({recipe: event.target.value, ips: self.props.input.ips});
+            self.props.onChange({recipe: event.target.value, ipm: self.props.input.ipm});
         };
-        var onChangeIps = function(event) {
-            self.props.onChange({recipe: self.props.input.recipe, ips: parseFloat(event.target.value)});
+        var onChangeIpm = function(event) {
+            self.props.onChange({recipe: self.props.input.recipe, ipm: parseFloat(event.target.value)});
         };
 
         return (
@@ -29,13 +29,13 @@ App.Input = React.createClass({
             </datalist>
             producing at a rate of
             <input
-              id="ips"
+              id="ipm"
               type="number"
               min="0"
               step="any"
-              value={this.props.input.ips}
-              onChange={onChangeIps}/>
-            item(s) / second.
+              value={this.props.input.ipm}
+              onChange={onChangeIpm}/>
+            item(s) / minute.
             <button id="addAnother" onClick={ this.props.onAddAnother }>Add Another</button>
             <button id="clear" onClick={ this.props.onClear }>Clear</button>
           </p>          

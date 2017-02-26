@@ -1,13 +1,27 @@
 /* global React,App*/
 
 var Ingredients = React.createClass({
+  getInitialState: function() {
+    return {
+      showIngredients: false
+    };
+  },
+
+  toggleShowIngredients: function() {
+    this.setState({showIngredients: !this.state.showIngredients});
+  },
+
+  _wholeNumberRoundUp: function(number) {
+    return Math.ceil(number);
+  },
+
   render: function() {
     var inputs, details;
-    if (this.props.req.ingredients && this.props.req.ingredients.length) {
+    if (this.props.req.ingredients && this.props.req.ingredients.length && (this.state.showIngredients || this.props.ingredients=="always")) {
       inputs = (
         <div className="inputs">
           {this.props.req.ingredients.map(function(ingredient){
-            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} />;
+            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="always"/>;
           })}
         </div>
       );
@@ -24,46 +38,29 @@ var Ingredients = React.createClass({
 
       details = [
         <div key="assemblers" className="assemblers">
-          requires
-          <span className="val">{this.props.req.assemblersRequired.toFixed(2)}</span>
-          {madeBy}
+          { this._wholeNumberRoundUp(this.props.req.assemblersRequired) } <span className="madeBy">{madeBy}</span>
         </div>,
         <div key="lines_required" className="lines_required">
-          on
-          <span className="val">{this.props.req.lines.toFixed(2)}</span>
-          assembly lines
-        </div>,
-        <div key="recipe-info" className="recipe-info">
-          (
-          <div className="assembler_max_line">
-            <span className="val">{this.props.req.assemblersPerLine.toFixed(2)}</span>
-            max {madeBy} per line
-          </div>
-          -
-          <div className="cycle_time">
-            cycles every
-            <span className="val">{this.props.req.assemblyTime.toFixed(2)}s</span>
-          </div>
-          <div className="ipspa">
-            @
-            <span className="val">{(1 / this.props.req.assemblyTime).toFixed(2)}</span>i/s
-          </div>
-          )
+          { this._wholeNumberRoundUp(this.props.req.lines) }
         </div>
       ];
     } else {
       details = null;
     }
+
+    var name;
+    if (this.props.ingredients == "toggle") {
+      name = (<div className="name"><a href="#" onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
+    } else {
+      name = (<div className="name">{this.props.req.name}</div>);
+    }
+
     return (
       <div className="req">
-        <div className="name">{this.props.req.name}</div>
+        { name }
         <div className="data">
-          <div className="ips">@
-            <span className="val ips-val">{this.props.req.ips.toFixed(2)}</span>
-            items/sec
-            (or 
-            <span className="val spi-val">{(1.0 / this.props.req.ips).toFixed(2)}</span>
-            s/item)
+          <div className="ips">
+            {(this.props.req.ips * 60).toFixed(2)}
           </div>
           {details}
         </div>
