@@ -45,10 +45,10 @@ App.Calculator = {
 	_getRecipe: function(name) {
 		var rawData = this.data[name];
 
-		if (name == "iron-ore" || name == "copper-ore") {
+		if (name == "iron-ore" || name == "copper-ore" || name == "stone" || name == "coal") {
 			rawData = {};
 			rawData.name = name;
-			rawData.energy_required = 1 / 0.525;
+			rawData.energy_required = 1 / (name == "stone" ? 0.65 : 0.525);
 			rawData.category = "ore";
 			rawData.ingredients = [];
 		}
