@@ -127,7 +127,7 @@ var Calc = React.createClass({
     
     return (
     	<div className="wrapper">
-        <Datasource datalib={this.props.currentLib} datalibs={this.props.datalibs} />
+        <Datasource datalib={this.props.currentlib} datalibs={this.props.datalibs} />
         <Input input={this.state.input} recipes={this.props.recipes} onChange={this.setInput} onAddAnother={this.addAnother} onClear={this.clear} onBulk={this.showBulk}/>
         <Options options={this.state.options} onChangeOptions={this.setOptions}/>
         {header}
