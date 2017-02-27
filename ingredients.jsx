@@ -15,6 +15,10 @@ var Ingredients = React.createClass({
     return Math.ceil(number);
   },
 
+  remove: function() {
+    this.props.onRemove(this.props.req.name);
+  },
+
   explain: function() {
     this.props.onExplain(this.props.req);
   },
@@ -63,6 +67,17 @@ var Ingredients = React.createClass({
       explainLink = null;
     }
 
+    var removeLink;
+    if (this.props.onRemove) {
+      removeLink = ( 
+        <div className="remove">
+          <a href="#" onClick={this.remove}>Remove</a>
+        </div>
+      );
+    } else {
+      removeLink = null;
+    }
+
     var name;
     if (this.props.ingredients == "toggle") {
       name = (<div className="name"><a href="#" onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
@@ -79,6 +94,7 @@ var Ingredients = React.createClass({
           </div>
           {details}
           {explainLink}
+          {removeLink}
         </div>
         {inputs}
       </div>

@@ -38,6 +38,7 @@ App.Input = React.createClass({
             item(s) / minute.
             <button id="addAnother" onClick={ this.props.onAddAnother }>Add Another</button>
             <button id="clear" onClick={ this.props.onClear }>Clear</button>
+            <button id="bulk" onClick={ this.props.onBulk }>Bulk</button>
           </p>          
           </div>
         );

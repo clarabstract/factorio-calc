@@ -9,6 +9,7 @@ var Options = App.Options;
 var Ingredients = App.Ingredients;
 var Graph = App.Graph;
 var Explain = App.Explain;
+var Bulk = App.Bulk;
 
 var Calc = React.createClass({
   getInitialState: function() {
@@ -20,7 +21,8 @@ var Calc = React.createClass({
         smeltlvl: "1",
         beltlvl: "5.7"
       },
-      explainingRecipe: null
+      explainingRecipe: null,
+      bulkVisible: false
     };
   },
 
@@ -39,6 +41,15 @@ var Calc = React.createClass({
 
   setInput: function(input) {
     this.setState({input:input}, this.calculate);
+  },
+
+  removeRecipe: function(recipeName) {
+    var additionalInputs = _.filter(this.state.additionalInputs, function(input) {
+      return input.recipe != recipeName;
+    });
+    this.setState({
+      additionalInputs: additionalInputs
+    }, this.calculate);
   },
 
   addAnother: function() {
@@ -67,13 +78,29 @@ var Calc = React.createClass({
   stopExplain: function() {
     this.setState({explainingRecipe: null});
   },
+
+  showBulk: function() {
+    this.setState({bulkVisible: true});
+  },
+
+  hideBulk: function() {
+    this.setState({bulkVisible: false});
+  },
+
+  bulkImport: function(recipes) {
+    this.setState({
+      input: {recipe: "", ipm: 1 },
+      additionalInputs: recipes,
+      bulkVisible: false
+    }, this.calculate);
+  },
   
   render: function() {
     var results, subtotals;
     if (this.state.result) {
       var self = this;
       results = this.state.result.recipes.map(function(recipe) {
-        return (<Ingredients key={recipe.name} req={recipe} ingredients="toggle"/>);
+        return (<Ingredients key={recipe.name} req={recipe} ingredients="toggle" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe}/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
         return (<Ingredients key={total.name} req={total} onExplain={self.explain}/>);    
@@ -101,7 +128,7 @@ var Calc = React.createClass({
     return (
     	<div className="wrapper">
         <Datasource datalib={this.props.currentLib} datalibs={this.props.datalibs} />
-        <Input input={this.state.input} recipes={this.props.recipes} onChange={this.setInput} onAddAnother={this.addAnother} onClear={this.clear}/>
+        <Input input={this.state.input} recipes={this.props.recipes} onChange={this.setInput} onAddAnother={this.addAnother} onClear={this.clear} onBulk={this.showBulk}/>
         <Options options={this.state.options} onChangeOptions={this.setOptions}/>
         {header}
         {results}
@@ -113,6 +140,7 @@ var Calc = React.createClass({
         <h2>Layout</h2>
         <Graph req={this.state.result} />
         <Explain recipe={this.state.explainingRecipe} options={this.state.options} onRequestClose={this.stopExplain} />
+        <Bulk bulkVisible={this.state.bulkVisible} inputs={ _.union([this.state.input], this.state.additionalInputs)} onRequestClose={this.hideBulk} onImport={this.bulkImport} />
     </div>
     );
   }
