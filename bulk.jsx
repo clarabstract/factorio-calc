@@ -43,6 +43,11 @@ App.Bulk = React.createClass({
       }
     },
 
+    onRequestClose: function(event) {
+      event.preventDefault();
+      this.props.onRequestClose();
+    },
+
     render: function() {
 
         var style = {
@@ -75,7 +80,7 @@ App.Bulk = React.createClass({
 
         return (
           <ReactModal isOpen={!!this.props.bulkVisible} contentLabel="Recipe Explanation" onRequestClose={this.props.onRequestClose} onAfterOpen={this.onOpen} style={ style }>
-            <a className="closeLink" href="#" onClick={this.props.onRequestClose}>Cancel</a>
+            <a href className="closeLink" onClick={this.onRequestClose}>Cancel</a>
             { content }
           </ReactModal>
         );

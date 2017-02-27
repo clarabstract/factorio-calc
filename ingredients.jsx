@@ -7,7 +7,8 @@ var Ingredients = React.createClass({
     };
   },
 
-  toggleShowIngredients: function() {
+  toggleShowIngredients: function(event) {
+    event.preventDefault();
     this.setState({showIngredients: !this.state.showIngredients});
   },
 
@@ -15,11 +16,13 @@ var Ingredients = React.createClass({
     return Math.ceil(number);
   },
 
-  remove: function() {
+  remove: function(event) {
+    event.preventDefault();
     this.props.onRemove(this.props.req.name);
   },
 
-  explain: function() {
+  explain: function(event) {
+    event.preventDefault();
     this.props.onExplain(this.props.req);
   },
 
@@ -60,7 +63,7 @@ var Ingredients = React.createClass({
     if (this.props.onExplain) {
       explainLink = ( 
         <div className="explain">
-          <a href="#" onClick={this.explain}>Explain</a>
+          <a href onClick={this.explain}>Explain</a>
         </div>
       );
     } else {
@@ -71,7 +74,7 @@ var Ingredients = React.createClass({
     if (this.props.onRemove) {
       removeLink = ( 
         <div className="remove">
-          <a href="#" onClick={this.remove}>Remove</a>
+          <a href onClick={this.remove}>Remove</a>
         </div>
       );
     } else {
@@ -80,7 +83,7 @@ var Ingredients = React.createClass({
 
     var name;
     if (this.props.ingredients == "toggle") {
-      name = (<div className="name"><a href="#" onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
+      name = (<div className="name"><a href onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
     } else {
       name = (<div className="name">{this.props.req.name}</div>);
     }

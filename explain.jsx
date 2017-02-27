@@ -2,6 +2,10 @@
 
 App.Explain = React.createClass({
 
+    onRequestClose: function(event) {
+      event.preventDefault();
+      this.props.onRequestClose();
+    },
 
     render: function() {
 
@@ -86,7 +90,7 @@ App.Explain = React.createClass({
 
         return (
           <ReactModal isOpen={!!this.props.recipe} contentLabel="Recipe Explanation" onRequestClose={this.props.onRequestClose} style={ style }>
-            <a className="closeLink" href="#" onClick={this.props.onRequestClose}>Close</a>
+            <a href className="closeLink" onClick={this.onRequestClose}>Close</a>
             { content }
           </ReactModal>
         );
