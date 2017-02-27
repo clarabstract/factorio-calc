@@ -15,6 +15,10 @@ var Ingredients = React.createClass({
     return Math.ceil(number);
   },
 
+  explain: function() {
+    this.props.onExplain(this.props.req);
+  },
+
   render: function() {
     var inputs, details;
     if (this.props.req.ingredients && this.props.req.ingredients.length && (this.state.showIngredients || this.props.ingredients=="always")) {
@@ -48,6 +52,17 @@ var Ingredients = React.createClass({
       details = null;
     }
 
+    var explainLink;
+    if (this.props.onExplain) {
+      explainLink = ( 
+        <div className="explain">
+          <a href="#" onClick={this.explain}>Explain</a>
+        </div>
+      );
+    } else {
+      explainLink = null;
+    }
+
     var name;
     if (this.props.ingredients == "toggle") {
       name = (<div className="name"><a href="#" onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
@@ -63,6 +78,7 @@ var Ingredients = React.createClass({
             {(this.props.req.ips * 60).toFixed(2)}
           </div>
           {details}
+          {explainLink}
         </div>
         {inputs}
       </div>

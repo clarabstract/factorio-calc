@@ -1,4 +1,6 @@
-/* global React,ReactDOM,App,_*/
+/* global React,ReactDOM,ReactModal,App,_*/
+
+ReactModal.setAppElement('#calc');
 
 var Calculator = App.Calculator;
 var Datasource = App.Datasource;
@@ -6,6 +8,7 @@ var Input = App.Input;
 var Options = App.Options;
 var Ingredients = App.Ingredients;
 var Graph = App.Graph;
+var Explain = App.Explain;
 
 var Calc = React.createClass({
   getInitialState: function() {
@@ -16,8 +19,13 @@ var Calc = React.createClass({
         asslvl: "0.5",
         smeltlvl: "1",
         beltlvl: "5.7"
-      }
+      },
+      explainingRecipe: null
     };
+  },
+
+  componentDidMount: function() {
+    this.calculate();
   },
 
   calculate: function() {
@@ -51,15 +59,24 @@ var Calc = React.createClass({
   setOptions: function(options) {
     this.setState({options: options }, this.calculate);
   },
+
+  explain: function(recipe) {
+    this.setState({explainingRecipe: recipe});
+  },
+
+  stopExplain: function() {
+    this.setState({explainingRecipe: null});
+  },
   
   render: function() {
     var results, subtotals;
     if (this.state.result) {
+      var self = this;
       results = this.state.result.recipes.map(function(recipe) {
         return (<Ingredients key={recipe.name} req={recipe} ingredients="toggle"/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients key={total.name} req={total} />);    
+        return (<Ingredients key={total.name} req={total} onExplain={self.explain}/>);    
       });
     }
     var header = (
@@ -95,6 +112,7 @@ var Calc = React.createClass({
         </div>
         <h2>Layout</h2>
         <Graph req={this.state.result} />
+        <Explain recipe={this.state.explainingRecipe} options={this.state.options} onRequestClose={this.stopExplain} />
     </div>
     );
   }

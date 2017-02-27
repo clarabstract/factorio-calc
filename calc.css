@@ -85,6 +85,13 @@ header .pull-right select {
 	left: 21em;
 }
 
+.req .explain {
+	position: absolute;
+	display: inline-block;
+	width: 6em;
+	left: 54em;
+}
+
 .req .name {
 	font-family: monospace;
 	font-weight: bold;
@@ -103,4 +110,38 @@ header .pull-right select {
 	margin-left:2em;
 	padding-left: 1em;
 	border-left:1px dotted #ccc;
+}
+
+a.closeLink {
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.explainContent .title {
+	font-size: 20px;
+}
+
+.explainContent .section {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.explainContent div {
+	margin-bottom: 10px;
+}
+
+.explainContent div.details {
+	margin-bottom: 0px;
+}
+
+.explainContent .mono {
+	font-family: monospace;
+}
+
+.explainContent .bmono {
+	font-family: monospace;
+	font-weight: bold;
 }
