@@ -27,46 +27,44 @@ App.Options = React.createClass({
     
     if (this.state.showOptions) {
       return (
-        <p>
+        <div>
           <a onClick={this.hideOptions} href="">
             <span className="glyphicon glyphicon-collapse-down"></span>
             Hide options
           </a>
           <div id="options">
-            <label>Assembler level:
-              <select
-                value={this.props.options.asslvl}
-                name="asslvl"
-                onChange={this.setOption}>
-                <option value="0.5">1 (0.5 modifier)</option>
-                <option value="0.75">2 (0.75 modifier)</option>
-                <option value="1.25">3 (1.25 modifier)</option>
-              </select>
-            </label>
-            <label>Smelter level:
-              <select
-                value={this.props.options.smeltlvl}
-                name="smeltlvl"
-                onChange={this.setOption}>
-                <option value="1">Stone</option>
-                <option value="2">Steel / Electric</option>
-              </select>
-            </label>
-            <label>Belt speed:
-              <select
-                value={this.props.options.beltlvl}
-                name="beltlvl"
-                onChange={this.setOption}>
-                <option value="3.8">Basic (slow corners)</option>
-                <option value="5.7">Basic (straight)</option>
-                <option value="6.3">Fast (slow corners)</option>
-                <option value="9.4">Fast (straight)</option>
-                <option value="8.3">Express (slow corners)</option>
-                <option value="14.2">Express (straight)</option>
-              </select>
-            </label>
+            <label>Assembler level:</label>
+            <select
+              value={this.props.options.asslvl}
+              name="asslvl"
+              onChange={this.setOption}>
+              <option value="0.5">1 (0.5 modifier)</option>
+              <option value="0.75">2 (0.75 modifier)</option>
+              <option value="1.25">3 (1.25 modifier)</option>
+            </select>
+            
+            <label>Smelter level:</label>
+            <select
+              value={this.props.options.smeltlvl}
+              name="smeltlvl"
+              onChange={this.setOption}>
+              <option value="1">Stone</option>
+              <option value="2">Steel / Electric</option>
+            </select>
+            <label>Belt speed:</label>
+            <select
+              value={this.props.options.beltlvl}
+              name="beltlvl"
+              onChange={this.setOption}>
+              <option value="3.8">Basic (slow corners)</option>
+              <option value="5.7">Basic (straight)</option>
+              <option value="6.3">Fast (slow corners)</option>
+              <option value="9.4">Fast (straight)</option>
+              <option value="8.3">Express (slow corners)</option>
+              <option value="14.2">Express (straight)</option>
+            </select>
           </div>
-        </p>
+        </div>
       );
      
     } else {

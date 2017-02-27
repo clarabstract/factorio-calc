@@ -24,6 +24,18 @@ header .pull-right select {
 	margin-left: 15px;
 }
 
+#options {
+	margin-bottom: 10px;
+}
+
+#options label {
+	margin-right: 5px;
+}
+
+#options select {
+	margin-right: 20px;
+}
+
 .req {
 	font-size: 12px;
 	color:#999;
