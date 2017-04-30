@@ -65,7 +65,7 @@ App.Explain = React.createClass({
                 </div>
                 <div className="section"># Assembly Lines</div>
                 <div>
-                  Your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } items/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } items/min, if more than { wholeNumber(recipe.assemblersPerLine) } { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
+                  One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } items/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } items/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
                 </div>
                 <div>
                   Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.

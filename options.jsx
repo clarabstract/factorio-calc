@@ -24,8 +24,31 @@ App.Options = React.createClass({
 
   render: function() {
 
-    
     if (this.state.showOptions) {
+
+      var oldBeltOptions = [
+        <option value="3.8">Basic (slow corners)</option>,
+        <option value="5.7">Basic (straight)</option>,
+        <option value="6.3">Fast (slow corners)</option>,
+        <option value="9.4">Fast (straight)</option>,
+        <option value="8.3">Express (slow corners)</option>,
+        <option value="14.2">Express (straight)</option>
+      ];
+
+      var newBeltOptions = [
+        <option value="6.66">Basic</option>,
+        <option value="13.33">Fast</option>,
+        <option value="20.00">Express</option>
+      ];
+
+      var beltOptions;
+      if (window.CURRENT_LIB == "core-0-11-3" || window.CURRENT_LIB == "core-0-10-2" || window.CURRENT_LIB == "core-0-9-8") {
+        beltOptions = oldBeltOptions;
+      } else {
+        beltOptions = newBeltOptions;
+      }
+      
+
       return (
         <div>
           <a onClick={this.hideOptions} href="">
@@ -56,12 +79,7 @@ App.Options = React.createClass({
               value={this.props.options.beltlvl}
               name="beltlvl"
               onChange={this.setOption}>
-              <option value="3.8">Basic (slow corners)</option>
-              <option value="5.7">Basic (straight)</option>
-              <option value="6.3">Fast (slow corners)</option>
-              <option value="9.4">Fast (straight)</option>
-              <option value="8.3">Express (slow corners)</option>
-              <option value="14.2">Express (straight)</option>
+              {beltOptions}
             </select>
           </div>
         </div>
