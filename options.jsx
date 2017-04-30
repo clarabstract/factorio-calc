@@ -74,12 +74,22 @@ App.Options = React.createClass({
               <option value="1">Stone</option>
               <option value="2">Steel / Electric</option>
             </select>
+
             <label>Belt speed:</label>
             <select
               value={this.props.options.beltlvl}
               name="beltlvl"
               onChange={this.setOption}>
               {beltOptions}
+            </select>
+
+            <label>Difficulty:</label>
+            <select
+              value={this.props.options.difficulty}
+              name="difficulty"
+              onChange={this.setOption}>
+              <option value="normal">Normal</option>
+              <option value="expensive">Expensive</option>
             </select>
           </div>
         </div>

@@ -19,7 +19,8 @@ var Calc = React.createClass({
       options: {
         asslvl: "0.5",
         smeltlvl: "1",
-        beltlvl: "5.7"
+        beltlvl: "5.7",
+        difficulty: "normal"
       },
       explainingRecipe: null,
       bulkVisible: false

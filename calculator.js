@@ -10,7 +10,7 @@ App.Calculator = {
 		var self = this;	
 
 		var recipes = _.filter(_.map(inputs, function(input) {
-			var recipe = self._getRecipeTree(input.recipe, input.ips);
+			var recipe = self._getRecipeTree(input.recipe, input.ips, options.difficulty);
 			if (recipe.category == "unknown") {
 				return null;
 			}
@@ -42,7 +42,7 @@ App.Calculator = {
 	},
 
 
-	_getRecipe: function(name) {
+	_getRecipe: function(name, difficulty) {
 		var rawData = this.data[name];
 
 		if (name == "iron-ore" || name == "copper-ore" || name == "stone" || name == "coal") {
@@ -62,17 +62,24 @@ App.Calculator = {
 			};
 		}
 		recipe.name = rawData.name;
-		recipe.baseTime = rawData.energy_required || 0.5;
 		recipe.category = rawData.category;
 
-		if (rawData.results) {
-			var selfResult = _.findWhere(rawData.results, {name: recipe.name});
-			recipe.outputs = selfResult ? selfResult.amount : 1;
+		var rawDataForDifficulty;
+		if (rawData[difficulty]) {
+			rawDataForDifficulty = rawData[difficulty];
 		} else {
-			recipe.outputs = rawData.result_count || 1;
+			rawDataForDifficulty = rawData;
 		}
 
-		recipe.ingredients = this._asArray(rawData.ingredients).map(function(rawIngredient) {
+		recipe.baseTime = rawDataForDifficulty.energy_required || 0.5;
+		if (rawDataForDifficulty.results) {
+			var selfResult = _.findWhere(rawDataForDifficulty.results, {name: recipe.name});
+			recipe.outputs = selfResult ? selfResult.amount : 1;
+		} else {
+			recipe.outputs = rawDataForDifficulty.result_count || 1;
+		}
+
+		recipe.ingredients = this._asArray(rawDataForDifficulty.ingredients).map(function(rawIngredient) {
 			if (rawIngredient.name) {
 				return {name: rawIngredient.name, amount: rawIngredient.amount};
 			} else {
@@ -83,13 +90,13 @@ App.Calculator = {
 		return recipe;
 	},
 
-	_getRecipeTree: function(name, ips) {
-		var recipe = this._getRecipe(name);
+	_getRecipeTree: function(name, ips, difficulty) {
+		var recipe = this._getRecipe(name, difficulty);
 		recipe.ips = ips;
 		var self = this;
 		recipe.ingredients.forEach(function(ingredient) {
 			var ingredientIps = recipe.ips / recipe.outputs * ingredient.amount;
-			ingredient.recipe = self._getRecipeTree(ingredient.name, ingredientIps);
+			ingredient.recipe = self._getRecipeTree(ingredient.name, ingredientIps, difficulty);
 		});
 
 		return recipe;
