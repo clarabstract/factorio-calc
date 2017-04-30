@@ -44,16 +44,33 @@
 		require('dataloader')
 		require('data.'..datalib)
 		require('ffi')
-		js.global:renderCalc(to_js_val(data.raw.recipe))
 		
 		function js_get_data()
 			return to_js_val(get_data())
 		end
 
 		js.global.App.getData = js_get_data
-		js.global.App.Calculator:init()
+		js.global.App.luaInitialized = true
+		console('Lua finished')
+
 	</script>
-	
+
+	<script type = "text/jsx">
+		var run = function() {
+			if (App.luaInitialized) {
+		    	App.Calculator.init();
+		    	ReactDOM.render(
+		      		<Calc datalibs={window.DATALIBS} currentlib={window.CURRENT_LIB}/>,
+		      		document.getElementById('calc')
+		    	);
+		  	} else {
+		    	console.log("Waiting for lua...");
+		    	window.setTimeout(run, 50);
+		  	}
+		};
+		run();
+	</script>
+
 	<style>
 	/* This sets the color for "TK" nodes to a light blue green. */
 	g.type-TK > rect {

@@ -2,6 +2,9 @@
 
 App.Input = React.createClass({
 
+    componentWillMount: function() {
+      this.recipes = App.getData.call();
+    },
     render: function() {
         var self = this;
         var onChangeRecipe = function(event) {
@@ -23,7 +26,7 @@ App.Input = React.createClass({
               value={this.props.input.recipe}
               onChange={onChangeRecipe}/>
             <datalist id="recipes">
-            	{Object.keys(this.props.recipes).map(function(recipe) {
+            	{Object.keys(this.recipes).map(function(recipe) {
                     return <option key={recipe}>{recipe}</option>;
                 })}
             </datalist>

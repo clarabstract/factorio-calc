@@ -146,14 +146,5 @@ var Calc = React.createClass({
   }
 });
 
-window.renderCalc = function(recipeData) {
-  window.setTimeout(function() {
-    ReactDOM.render(
-      <Calc
-        recipes={recipeData}
-        datalibs={window.DATALIBS}
-        currentlib={window.CURRENT_LIB}/>,
-      document.getElementById('calc')
-    );
-  }, 0);
-};
+
+
