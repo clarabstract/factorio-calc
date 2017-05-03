@@ -2,11 +2,11 @@
 
 function get_recipe(name, options)
 	local rdata = data.raw.recipe[name]
-	local rdiff = rdata[options.difficulty]
 	local recipe = {}
 	if not rdata then
 		return rdata
 	end
+	local rdiff = rdata[options.difficulty] or {}
 	recipe.name = rdata.name
 	recipe.time = (rdiff.energy_required or rdata.energy_required) or 0.5
 	if rdata.category == 'smelting' then
