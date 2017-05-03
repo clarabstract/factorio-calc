@@ -92,6 +92,7 @@ var Calc = React.createClass({
         asslvl: "0.5",
         smeltlvl: "1",
         beltlvl: "5.7",
+        difficulty: "normal",
       }
     };
   },
@@ -201,6 +202,15 @@ var Calc = React.createClass({
                 <option value="9.4">Fast (straight)</option>
                 <option value="8.3">Express (slow corners)</option>
                 <option value="14.2">Express (straight)</option>
+              </select>
+            </label>
+            <label>Recipe difficulty:
+              <select
+                value={this.state.opts.difficulty}
+                name="difficulty"
+                onChange={this.setOption}>
+                <option value="normal">Normal</option>
+                <option value="expensive">Expensive</option>
               </select>
             </label>
           </div>
