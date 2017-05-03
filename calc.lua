@@ -2,16 +2,18 @@
 
 function get_recipe(name, options)
 	local rdata = data.raw.recipe[name]
+	local rdiff = rdata[options.difficulty]
 	local recipe = {}
 	if not rdata then
 		return rdata
 	end
 	recipe.name = rdata.name
-	recipe.time = rdata.energy_required or 0.5
+	recipe.time = (rdiff.energy_required or rdata.energy_required) or 0.5
 	if rdata.category == 'smelting' then
 		console(options.smeltlvl)
 		recipe.time = recipe.time / tonumber(options.smeltlvl)
-		recipe.outputs = rdata.result_count or 1
+		-- It doesn't look like any of the base recipes change their result by difficulty, but we'll check anyway
+		recipe.outputs = (rdiff.result_count or rdata.result_count) or 1
 	elseif rdata.category == 'chemistry' then
 		recipe.time = recipe.time / 1.25
 		if rdata.results then
@@ -25,11 +27,15 @@ function get_recipe(name, options)
 		end
 	else
 		recipe.time = recipe.time / tonumber(options.asslvl)
-		recipe.outputs = rdata.result_count or 1
+		-- Ditto, see above
+		recipe.outputs = (rdiff.result_count or rdata.result_count) or 1
 	end
 	recipe.ips = recipe.outputs / recipe.time
 	recipe.inputs = {}
-	for i, ingr in ipairs(rdata.ingredients) do
+	-- I'm not sure if factorio prefers difficulty specific recipes over ones in the base definition
+	-- It might even be an error to have both. Research required! In this case, we're preferring difficulty specific.
+	local ingredients = rdiff.ingredients or rdata.ingredients
+	for i, ingr in ipairs(ingredients) do
 		local ingredient = {}
 		if ingr.name then
 			ingredient.name = ingr.name
