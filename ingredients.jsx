@@ -49,11 +49,16 @@ var Ingredients = React.createClass({
       details = [
         <div key="assemblers" className="assemblers">
           { this._wholeNumberRoundUp(this.props.req.assemblersRequired) } <span className="madeBy">{madeBy}</span>
-        </div>,
-        <div key="lines_required" className="lines_required">
-          { this._wholeNumberRoundUp(this.props.req.lines) }
         </div>
       ];
+      if (this.props.req.type != "fluid")
+      {
+        details.push(
+          <div key="lines_required" className="lines_required">
+            { this._wholeNumberRoundUp(this.props.req.lines) }
+          </div>
+        );
+      }
     } else {
       details = null;
     }
