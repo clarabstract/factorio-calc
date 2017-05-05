@@ -11,8 +11,16 @@ var Ingredients = React.createClass({
     this.setState({showIngredients: !this.state.showIngredients});
   },
 
-  _wholeNumberRoundUp: function(number) {
-    return Math.ceil(number);
+  _wholeNumberRoundUpIfAppropriate: function(number) {
+    if (this.props.alwaysShowDecimals) {
+      return this._twoDecimalPlaces(number);
+    } else {
+      return Math.ceil(number);
+    }
+  },
+
+  _twoDecimalPlaces: function(number) {
+    return (Math.ceil(number * 100)/100).toFixed(2);
   },
 
   remove: function(event) {
@@ -28,10 +36,11 @@ var Ingredients = React.createClass({
   render: function() {
     var inputs, details;
     if (this.props.req.ingredients && this.props.req.ingredients.length && (this.state.showIngredients || this.props.ingredients=="always")) {
+      var self = this;
       inputs = (
         <div className="inputs">
           {this.props.req.ingredients.map(function(ingredient){
-            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="off"/>;
+            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="off" alwaysShowDecimals={self.props.alwaysShowDecimals}/>;
           })}
         </div>
       );
@@ -48,7 +57,10 @@ var Ingredients = React.createClass({
 
       details = [
         <div key="assemblers" className="assemblers">
-          { this._wholeNumberRoundUp(this.props.req.assemblersRequired) } <span className="madeBy">{madeBy}</span>
+          { this._wholeNumberRoundUpIfAppropriate(this.props.req.assemblersRequired) } <span className="madeBy">{madeBy}</span>
+        </div>,
+        <div key="lines_required" className="lines_required">
+          { this._wholeNumberRoundUpIfAppropriate(this.props.req.lines) }
         </div>
       ];
       if (this.props.req.type != "fluid")
@@ -97,7 +109,7 @@ var Ingredients = React.createClass({
         { name }
         <div className="data">
           <div className="ips">
-            {(this.props.req.ips * 60).toFixed(2)}
+            {this._twoDecimalPlaces(this.props.req.ips * 60)}
           </div>
           {details}
           {explainLink}

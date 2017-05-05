@@ -20,7 +20,8 @@ var Calc = React.createClass({
         asslvl: "0.5",
         smeltlvl: "1",
         beltlvl: "5.7",
-        difficulty: "normal"
+        difficulty: "normal",
+        alwaysShowDecimals: false
       },
       explainingRecipe: null,
       bulkVisible: false
@@ -33,7 +34,7 @@ var Calc = React.createClass({
 
   calculate: function() {
     
-    var inputs = _.map(_.union([this.state.input], this.state.additionalInputs), function(input) {
+    var inputs = _.map(this.getInputs(), function(input) {
       return {recipe: input.recipe, ips: input.ipm / 60};
     });
     var result = Calculator.calculateAndAnalyze(inputs, this.state.options);
@@ -101,10 +102,10 @@ var Calc = React.createClass({
     if (this.state.result) {
       var self = this;
       results = this.state.result.recipes.map(function(recipe) {
-        return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe}/>);
+        return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain}/>);    
+        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);    
       });
     }
     var header = (
@@ -141,10 +142,20 @@ var Calc = React.createClass({
         <h2>Layout</h2>
         <Graph req={this.state.result} />
         <Explain recipe={this.state.explainingRecipe} options={this.state.options} onRequestClose={this.stopExplain} />
-        <Bulk bulkVisible={this.state.bulkVisible} inputs={ _.union([this.state.input], this.state.additionalInputs)} onRequestClose={this.hideBulk} onImport={this.bulkImport} />
+        <Bulk bulkVisible={this.state.bulkVisible} inputs={ this.getInputs() } onRequestClose={this.hideBulk} onImport={this.bulkImport} />
     </div>
     );
+  },
+
+  getInputs: function() {
+    if (this.state.input.recipe) {
+      return _.union([this.state.input], this.state.additionalInputs);
+    } else {
+      return this.state.additionalInputs;
+    }
   }
+
+
 });
 
 
