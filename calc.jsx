@@ -101,10 +101,10 @@ var Calc = React.createClass({
     if (this.state.result) {
       var self = this;
       results = this.state.result.recipes.map(function(recipe) {
-        return (<Ingredients key={recipe.name} req={recipe} ingredients="toggle" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe}/>);
+        return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe}/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients key={total.name} req={total} onExplain={self.explain}/>);    
+        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain}/>);    
       });
     }
     var header = (

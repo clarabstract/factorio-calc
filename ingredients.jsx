@@ -3,10 +3,9 @@
 var Ingredients = React.createClass({
   getInitialState: function() {
     return {
-      showIngredients: false
+      showIngredients: this.props.ingredients == "on"
     };
   },
-
   toggleShowIngredients: function(event) {
     event.preventDefault();
     this.setState({showIngredients: !this.state.showIngredients});
@@ -32,7 +31,7 @@ var Ingredients = React.createClass({
       inputs = (
         <div className="inputs">
           {this.props.req.ingredients.map(function(ingredient){
-            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="always"/>;
+            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="off"/>;
           })}
         </div>
       );
@@ -82,10 +81,10 @@ var Ingredients = React.createClass({
     }
 
     var name;
-    if (this.props.ingredients == "toggle") {
-      name = (<div className="name"><a href onClick={this.toggleShowIngredients}>{this.props.req.name}</a></div>);
-    } else {
+    if (this.props.ingredients == "always" || this.props.ingredients == "never" || !this.props.req.ingredients || !this.props.req.ingredients.length) {
       name = (<div className="name">{this.props.req.name}</div>);
+    } else {
+      name = (<div className="name"><a href style={{color: "black"}} onClick={this.toggleShowIngredients}>{this.state.showIngredients ? "-" : "+"} {this.props.req.name}</a></div>);
     }
 
     return (
