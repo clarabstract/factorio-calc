@@ -20,7 +20,8 @@ var Calc = React.createClass({
         asslvl: "0.5",
         smeltlvl: "1",
         beltlvl: "5.7",
-        difficulty: "normal"
+        difficulty: "normal",
+        alwaysShowDecimals: false
       },
       explainingRecipe: null,
       bulkVisible: false
@@ -101,10 +102,10 @@ var Calc = React.createClass({
     if (this.state.result) {
       var self = this;
       results = this.state.result.recipes.map(function(recipe) {
-        return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe}/>);
+        return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain}/>);    
+        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);    
       });
     }
     var header = (

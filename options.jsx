@@ -18,7 +18,12 @@ App.Options = React.createClass({
   },
 
   setOption: function(ev) {
-        this.props.options[ev.target.name] = ev.target.value;
+        var value = ev.target.value;
+        if (ev.target.name == "alwaysShowDecimals") {
+          value = ev.target.value == "true";
+        }
+
+        this.props.options[ev.target.name] = value;
         this.props.onChangeOptions(this.props.options);
   },
 
@@ -90,6 +95,15 @@ App.Options = React.createClass({
               onChange={this.setOption}>
               <option value="normal">Normal</option>
               <option value="expensive">Expensive</option>
+            </select>
+
+            <label>Show Decimals:</label>
+            <select
+              value={this.props.options.alwaysShowDecimals + ""}
+              name="alwaysShowDecimals"
+              onChange={this.setOption}>
+              <option value="false">Automatic</option>
+              <option value="true">Always</option>
             </select>
           </div>
         </div>
