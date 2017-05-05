@@ -36,10 +36,11 @@ var Ingredients = React.createClass({
   render: function() {
     var inputs, details;
     if (this.props.req.ingredients && this.props.req.ingredients.length && (this.state.showIngredients || this.props.ingredients=="always")) {
+      var self = this;
       inputs = (
         <div className="inputs">
           {this.props.req.ingredients.map(function(ingredient){
-            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="off" alwaysShowDecimals={this.props.alwaysShowDecimals}/>;
+            return <Ingredients key={ingredient.recipe.name} req={ingredient.recipe} ingredients="off" alwaysShowDecimals={self.props.alwaysShowDecimals}/>;
           })}
         </div>
       );
