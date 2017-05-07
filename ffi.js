@@ -11,4 +11,4 @@ window.lua_ffi = {
 	push_to_array: function(arr, value)  {
 		arr.push(value);
 	}
-}
+};

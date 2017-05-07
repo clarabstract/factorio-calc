@@ -56,19 +56,19 @@ App.Explain = React.createClass({
             }
             if (recipe.type == "fluid")
             {
-              madeUnits = "units"
+              madeUnits = "units";
             }
             
-            var assemb = null;
+            var assemblyLinesExplanation = null;
             if (recipe.type != "fluid") {
-                assemb = [
+                assemblyLinesExplanation = [
                   <div className="section"># Assembly Lines</div>,
                   <div>
                     One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
                   </div>,
                   <div>
                     Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.
-                  </div>,
+                  </div>
                 ];
             }
             details = (
@@ -80,7 +80,7 @@ App.Explain = React.createClass({
                 <div>
                   Therefore, to meet the required rate of { decimalNumber(recipe.ips * 60) } {madeUnits}/min, you need { decimalNumber(recipe.assemblersRequired) } { madeByPlural }, which in real life means { wholeNumber(recipe.assemblersRequired) } { madeByPlural }.
                 </div>
-                {assemb}
+                {assemblyLinesExplanation}
               </div>
             );
           }

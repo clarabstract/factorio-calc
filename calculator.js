@@ -78,7 +78,7 @@ App.Calculator = {
 			recipe.type = selfResult ? selfResult.type : "item";
 		} else {
 			recipe.outputs = rawDataForDifficulty.result_count || 1;
-			recipe.type = "item"
+			recipe.type = "item";
 		}
 
 		recipe.ingredients = this._asArray(rawDataForDifficulty.ingredients).map(function(rawIngredient) {
@@ -155,7 +155,7 @@ App.Calculator = {
 		}
 
 		var oneAssemblerRate = recipe.outputs / assemblyTime;
-		var assembersRequired = recipe.ips / oneAssemblerRate
+		var assembersRequired = recipe.ips / oneAssemblerRate;
 
 		return {assemblersRequired: assembersRequired, assemblyTime: assemblyTime, oneAssemblerRate: oneAssemblerRate};
 	},
