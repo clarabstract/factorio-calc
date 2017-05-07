@@ -75,8 +75,10 @@ App.Calculator = {
 		if (rawDataForDifficulty.results) {
 			var selfResult = _.findWhere(rawDataForDifficulty.results, {name: recipe.name});
 			recipe.outputs = selfResult ? selfResult.amount : 1;
+			recipe.type = selfResult ? selfResult.type : "item";
 		} else {
 			recipe.outputs = rawDataForDifficulty.result_count || 1;
+			recipe.type = "item"
 		}
 
 		recipe.ingredients = this._asArray(rawDataForDifficulty.ingredients).map(function(rawIngredient) {

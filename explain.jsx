@@ -39,6 +39,7 @@ App.Explain = React.createClass({
 
             var madeBySingular = "assembler";
             var madeByPlural = "assemblers";
+            var madeUnits = "items";
             var assemblerPartOne = (<span>Your chosen assembler has a crafting speed of { bmono(this.props.options.asslvl) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to create { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
             if (recipe.category == "ore") {
               madeBySingular = "drill";
@@ -49,27 +50,37 @@ App.Explain = React.createClass({
               madeByPlural = "furnaces";
               assemblerPartOne = (<span>Your chosen furnace has a crafting speed of { bmono(this.props.options.smeltlvl) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to smelt { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
             } else if (recipe.category == "chemistry") {
-              madeBySingular = "furnace";
+              madeBySingular = "chemplant";
               madeByPlural = "chemplants";
               assemblerPartOne = (<span>Chemplants have a crafting speed of { bmono(1.25) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to create { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
             }
-
+            if (recipe.type == "fluid")
+            {
+              madeUnits = "units"
+            }
+            
+            var assemb = null;
+            if (recipe.type != "fluid") {
+                assemb = [
+                  <div className="section"># Assembly Lines</div>,
+                  <div>
+                    One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
+                  </div>,
+                  <div>
+                    Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.
+                  </div>,
+                ];
+            }
             details = (
               <div className="details">
                 <div className="section"># Assemblers</div>
                 <div>
-                  { assemblerPartOne } This in turn means one { madeBySingular } produces at a rate of { decimalNumber(recipe.oneAssemblerRate * 60) } items/min.
+                  { assemblerPartOne } This in turn means one { madeBySingular } produces at a rate of { decimalNumber(recipe.oneAssemblerRate * 60) } {madeUnits}/min.
                 </div>
                 <div>
-                  Therefore, to meet the required rate of { decimalNumber(recipe.ips * 60) } items/min, you need { decimalNumber(recipe.assemblersRequired) } { madeByPlural }, which in real life means { wholeNumber(recipe.assemblersRequired) } { madeByPlural }.
+                  Therefore, to meet the required rate of { decimalNumber(recipe.ips * 60) } {madeUnits}/min, you need { decimalNumber(recipe.assemblersRequired) } { madeByPlural }, which in real life means { wholeNumber(recipe.assemblersRequired) } { madeByPlural }.
                 </div>
-                <div className="section"># Assembly Lines</div>
-                <div>
-                  One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } items/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } items/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
-                </div>
-                <div>
-                  Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.
-                </div>
+                {assemb}
               </div>
             );
           }
