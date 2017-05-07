@@ -174,3 +174,9 @@ a.closeLink {
 	color: red;
 	margin-bottom: 10px;
 }
+
+.graph {
+	overflow-x: auto;
+	border: 1px solid lightgray;
+	padding: 5px;
+}
