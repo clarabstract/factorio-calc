@@ -1,4 +1,8 @@
-
+local function required_asslvl(ingredient_count)
+    if ingredient_count > 4 then return 1.25 end
+    if ingredient_count > 2 then return 0.75 end
+    return 0.5
+end
 
 function get_recipe(name, options)
 	local rdata = data.raw.recipe[name]
@@ -24,7 +28,10 @@ function get_recipe(name, options)
 			recipe.outputs = 1
 		end
 	else
-		recipe.time = recipe.time / tonumber(options.asslvl)
+		recipe.time = recipe.time / math.max(
+                    tonumber(options.asslvl),
+                    required_asslvl(#rdata.ingredients)
+                )
 		recipe.outputs = rdata.result_count or 1
 	end
 	recipe.ips = recipe.outputs / recipe.time
