@@ -88,6 +88,8 @@ App.Calculator = {
 				return {name: rawIngredient[0], amount: rawIngredient[1]};
 			}
 		});
+
+		recipe.minAssemblerLevel = this._getMinAssemblerLevel(recipe);
 	
 		return recipe;
 	},
@@ -137,6 +139,18 @@ App.Calculator = {
 		return finalTotals;
 	},
 
+	_getMinAssemblerLevel: function(recipe) {
+
+		if (recipe.ingredients.length > 4) {
+			return 1.25;
+		} else if (recipe.ingredients.length > 2) {
+			return 0.75;
+		} else {
+			return 0.5;
+		}
+
+	},
+
 	_getAssemblyInfoForRecipe: function(recipe, options) {
 
 		var assemblyTime;
@@ -151,7 +165,7 @@ App.Calculator = {
 			assemblyTime = recipe.baseTime;
 		}
 		else {
-			assemblyTime = recipe.baseTime / parseFloat(options.asslvl);
+			assemblyTime = recipe.baseTime / Math.max(recipe.minAssemblerLevel, parseFloat(options.asslvl));
 		}
 
 		var oneAssemblerRate = recipe.outputs / assemblyTime;

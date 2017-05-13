@@ -36,11 +36,7 @@ App.Explain = React.createClass({
           var recipe = this.props.recipe;
           var details = null;
           if (this.props.recipe.assemblersRequired) {
-
-            var madeBySingular = "assembler";
-            var madeByPlural = "assemblers";
-            var madeUnits = "items";
-            var assemblerPartOne = (<span>Your chosen assembler has a crafting speed of { bmono(this.props.options.asslvl) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to create { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
+            var madeBySingular, madeByPlural, madeUnits, assemblerPartOne;
             if (recipe.category == "ore") {
               madeBySingular = "drill";
               madeByPlural = "drills";
@@ -53,10 +49,15 @@ App.Explain = React.createClass({
               madeBySingular = "chemplant";
               madeByPlural = "chemplants";
               assemblerPartOne = (<span>Chemplants have a crafting speed of { bmono(1.25) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to create { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
+            } else {
+              madeBySingular = "assembler";
+              madeByPlural = "assemblers";
+              assemblerPartOne = (<span>Your chosen assembler has a crafting speed of { bmono(Math.max(recipe.minAssemblerLevel, this.props.options.asslvl)) }. This means it will take {decimalNumber(recipe.assemblyTime)} seconds to create { wholeNumber(recipe.outputs)} { bmono(recipe.name) }.</span>);
             }
-            if (recipe.type == "fluid")
-            {
+            if (recipe.type == "fluid") {
               madeUnits = "units";
+            } else {
+              madeUnits = "items";
             }
             
             var assemblyLinesExplanation = null;
