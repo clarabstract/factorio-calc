@@ -1,0 +1,3 @@
+--ignore-file=is:lua.vm.js
+--ignore-dir=bower_components
+--ignore-dir=data
