@@ -25,25 +25,21 @@ App.Options = class Options extends React.Component {
     this.props.onChangeOptions(this.props.options);
   }
 
-// Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `Options`. See https://fb.me/react-warning-keys for more information.
-//     in option (created by Options)
   render() {
-
     if (this.state.showOptions) {
-
       var oldBeltOptions = [
-        <option value="3.8">Basic (slow corners)</option>,
-        <option value="5.7">Basic (straight)</option>,
-        <option value="6.3">Fast (slow corners)</option>,
-        <option value="9.4">Fast (straight)</option>,
-        <option value="8.3">Express (slow corners)</option>,
-        <option value="14.2">Express (straight)</option>
+        <option key="3.8" value="3.8">Basic (slow corners)</option>,
+        <option key="5.7" value="5.7">Basic (straight)</option>,
+        <option key="6.3" value="6.3">Fast (slow corners)</option>,
+        <option key="9.4" value="9.4">Fast (straight)</option>,
+        <option key="8.3" value="8.3">Express (slow corners)</option>,
+        <option key="14.2" value="14.2">Express (straight)</option>
       ];
 
       var newBeltOptions = [
-        <option value="6.66">Basic</option>,
-        <option value="13.33">Fast</option>,
-        <option value="20.00">Express</option>
+        <option key="6.66" value="6.66">Basic</option>,
+        <option key="13.33" value="13.33">Fast</option>,
+        <option key="20.00" value="20.00">Express</option>
       ];
 
       var beltOptions;
