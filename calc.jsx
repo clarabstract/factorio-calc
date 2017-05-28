@@ -1,3 +1,4 @@
+"use strict";
 /* global React,ReactDOM,ReactModal,App,_*/
 
 ReactModal.setAppElement('#calc');
@@ -33,7 +34,7 @@ var Calc = React.createClass({
   },
 
   calculate: function() {
-    
+
     var inputs = _.map(this.getInputs(), function(input) {
       return {recipe: input.recipe, ips: input.ipm / 60};
     });
@@ -96,7 +97,7 @@ var Calc = React.createClass({
       bulkVisible: false
     }, this.calculate);
   },
-  
+
   render: function() {
     var results, subtotals;
     if (this.state.result) {
@@ -105,7 +106,7 @@ var Calc = React.createClass({
         return (<Ingredients key={recipe.name} req={recipe} ingredients="off" onRemove={recipe.name == self.state.input.recipe ? null : self.removeRecipe} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);
       });
       subtotals = this.state.result.totals.map(function(total) {
-        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);    
+        return (<Ingredients key={total.name} req={total} ingredients="never" onExplain={self.explain} alwaysShowDecimals={self.state.options.alwaysShowDecimals}/>);
       });
     }
     var header = (
@@ -126,7 +127,7 @@ var Calc = React.createClass({
         </div>
       </div>
     );
-    
+
     return (
     	<div className="wrapper">
         <Datasource datalib={this.props.currentlib} datalibs={this.props.datalibs} />
