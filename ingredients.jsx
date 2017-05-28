@@ -1,39 +1,38 @@
 /* global React,App*/
 
-var Ingredients = React.createClass({
-  getInitialState: function() {
-    return {
-      showIngredients: this.props.ingredients == "on"
-    };
-  },
-  toggleShowIngredients: function(event) {
+App.Ingredients = class Ingredients extends React.Component {
+  state = {
+    showIngredients: false
+  }
+
+  toggleShowIngredients = (event) => {
     event.preventDefault();
     this.setState({showIngredients: !this.state.showIngredients});
-  },
+  }
 
-  _wholeNumberRoundUpIfAppropriate: function(number) {
+  _wholeNumberRoundUpIfAppropriate(number) {
     if (this.props.alwaysShowDecimals) {
       return this._twoDecimalPlaces(number);
     } else {
       return Math.ceil(number);
     }
-  },
+  }
 
-  _twoDecimalPlaces: function(number) {
+  _twoDecimalPlaces(number) {
     return (Math.ceil(number * 100)/100).toFixed(2);
-  },
+  }
 
-  remove: function(event) {
+  remove = (event) => {
     event.preventDefault();
     this.props.onRemove(this.props.req.name);
-  },
+  }
 
-  explain: function(event) {
+  explain = (event) => {
     event.preventDefault();
     this.props.onExplain(this.props.req);
-  },
+  }
 
-  render: function() {
+  render() {
     var inputs, details;
     if (this.props.req.ingredients && this.props.req.ingredients.length && (this.state.showIngredients || this.props.ingredients=="always")) {
       var self = this;
@@ -74,7 +73,7 @@ var Ingredients = React.createClass({
 
     var explainLink;
     if (this.props.onExplain) {
-      explainLink = ( 
+      explainLink = (
         <div className="explain">
           <a href onClick={this.explain}>Explain</a>
         </div>
@@ -85,7 +84,7 @@ var Ingredients = React.createClass({
 
     var removeLink;
     if (this.props.onRemove) {
-      removeLink = ( 
+      removeLink = (
         <div className="remove">
           <a href onClick={this.remove}>Remove</a>
         </div>
@@ -116,6 +115,4 @@ var Ingredients = React.createClass({
       </div>
     );
   }
-});
-
-App.Ingredients = Ingredients;
+};

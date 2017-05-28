@@ -1,33 +1,33 @@
 /* global React,App*/
-App.Options = React.createClass({
 
-  getInitialState: function() {
-    return {
-        showOptions: false
-    };
-  },
+App.Options = class Options extends React.Component {
+  state = {
+    showOptions: false
+  }
 
-  showOptions: function(ev) {
+  showOptions = (ev) =>  {
     ev.preventDefault();
     this.setState({showOptions: true});
-  },
+  }
 
-  hideOptions: function(ev) {
+  hideOptions = (ev) => {
     ev.preventDefault();
     this.setState({showOptions: false});
-  },
+  }
 
-  setOption: function(ev) {
-        var value = ev.target.value;
-        if (ev.target.name == "alwaysShowDecimals") {
-          value = ev.target.value == "true";
-        }
+  setOption = (ev) => {
+    var value = ev.target.value;
+    if (ev.target.name == "alwaysShowDecimals") {
+      value = ev.target.value == "true";
+    }
 
-        this.props.options[ev.target.name] = value;
-        this.props.onChangeOptions(this.props.options);
-  },
+    this.props.options[ev.target.name] = value;
+    this.props.onChangeOptions(this.props.options);
+  }
 
-  render: function() {
+// Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `Options`. See https://fb.me/react-warning-keys for more information.
+//     in option (created by Options)
+  render() {
 
     if (this.state.showOptions) {
 
@@ -52,7 +52,7 @@ App.Options = React.createClass({
       } else {
         beltOptions = newBeltOptions;
       }
-      
+
 
       return (
         <div>
@@ -70,7 +70,7 @@ App.Options = React.createClass({
               <option value="0.75">2 (0.75 modifier)</option>
               <option value="1.25">3 (1.25 modifier)</option>
             </select>
-            
+
             <label>Smelter level:</label>
             <select
               value={this.props.options.smeltlvl}
@@ -108,7 +108,7 @@ App.Options = React.createClass({
           </div>
         </div>
       );
-     
+
     } else {
       return (
         <p>
@@ -116,9 +116,9 @@ App.Options = React.createClass({
             <span className="glyphicon glyphicon-expand"></span>
             Show options
           </a>
-          
+
         </p>
       );
     }
   }
-});
+};

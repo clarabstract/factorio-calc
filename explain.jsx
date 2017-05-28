@@ -1,14 +1,14 @@
  /* global React,App,ReactModal*/
 
-App.Explain = React.createClass({
-
-    onRequestClose: function(event) {
+App.Explain = class Explain extends React.Component {
+    onRequestClose = (event) => {
       event.preventDefault();
       this.props.onRequestClose();
-    },
+    }
 
-    render: function() {
-
+// Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `Explain`. See https://fb.me/react-warning-keys for more information.
+//     in div (created by Explain)
+    render() {
         var style = {
           content: {
             top: "100px",
@@ -59,13 +59,13 @@ App.Explain = React.createClass({
             } else {
               madeUnits = "items";
             }
-            
+
             var assemblyLinesExplanation = null;
             if (recipe.type != "fluid") {
                 assemblyLinesExplanation = [
                   <div className="section"># Assembly Lines</div>,
                   <div>
-                    One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
+                    One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production.
                   </div>,
                   <div>
                     Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.
@@ -107,4 +107,4 @@ App.Explain = React.createClass({
           </ReactModal>
         );
     }
-});
+};
