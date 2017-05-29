@@ -1,26 +1,23 @@
  /* global React,App,ReactModal,_*/
 
-App.Bulk = React.createClass({
+App.Bulk = class Bulk extends React.Component {
+    state = {
+      inputText: "",
+      error: null
+    }
 
-    getInitialState: function() {
-      return {
-        inputText: "",
-        error: null
-      };
-    },
-
-    onOpen: function() {
+    onOpen = () => {
       var inputText = _.map(this.props.inputs, function(input) {
         return input.recipe + " " + input.ipm;
       }).join("\n");
       this.setState({inputText: inputText});
-    },
+    }
 
-    onChangeText: function(event) {
+    onChangeText = (event) => {
       this.setState({inputText: event.target.value});
-    },
+    }
 
-    onImport: function() {
+    onImport = () => {
       var inputText = this.state.inputText;
       var lines = inputText.split(/\n/);
       var errorAtLine = null;
@@ -41,14 +38,14 @@ App.Bulk = React.createClass({
       } else {
         this.props.onImport(recipes);
       }
-    },
+    }
 
-    onRequestClose: function(event) {
+    onRequestClose = (event) => {
       event.preventDefault();
       this.props.onRequestClose();
-    },
+    }
 
-    render: function() {
+    render() {
 
         var style = {
           content: {
@@ -66,7 +63,7 @@ App.Bulk = React.createClass({
         } else {
           error = null;
         }
-      
+
         var content = (
           <div className="bulkContent">
             <div className="title">Bulk import/export</div>
@@ -76,7 +73,7 @@ App.Bulk = React.createClass({
             <button onClick={this.onImport}>Import</button>
           </div>
         );
-        
+
 
         return (
           <ReactModal isOpen={!!this.props.bulkVisible} contentLabel="Recipe Explanation" onRequestClose={this.props.onRequestClose} onAfterOpen={this.onOpen} style={ style }>
@@ -85,4 +82,4 @@ App.Bulk = React.createClass({
           </ReactModal>
         );
     }
-});
+};

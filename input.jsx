@@ -1,11 +1,11 @@
  /* global React,App*/
 
-App.Input = React.createClass({
-
-    componentWillMount: function() {
+App.Input = class Input extends React.Component {
+    componentWillMount() {
       this.recipes = App.getData.call();
-    },
-    render: function() {
+    }
+
+    render() {
         var self = this;
         var onChangeRecipe = function(event) {
             self.props.onChange({recipe: event.target.value, ipm: self.props.input.ipm});
@@ -18,7 +18,7 @@ App.Input = React.createClass({
           <div>
           <p>
             Calculate the requirements for
-            <input 
+            <input
               id="recipe"
               type="text"
               list="recipes"
@@ -42,8 +42,8 @@ App.Input = React.createClass({
             <button id="addAnother" onClick={ this.props.onAddAnother }>Add Another</button>
             <button id="clear" onClick={ this.props.onClear }>Clear</button>
             <button id="bulk" onClick={ this.props.onBulk }>Bulk</button>
-          </p>          
+          </p>
           </div>
         );
     }
-});
+};

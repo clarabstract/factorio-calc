@@ -6,6 +6,8 @@
 			'core-0-15-2',
 			'core-0-14-22',
 			'core-0-14-20',
+			'core-0-13-20',
+			'core-0-13-15',
 			'core-0-12-33',
 			'core-0-11-3',
 			'core-0-10-2',
@@ -16,11 +18,11 @@
 		window.App = {}
 	</script>
 	<script type="text/javascript" src="lua.vm.js"></script>
-	<script type="text/javascript" src="ffi.js"></script>	
+	<script type="text/javascript" src="ffi.js"></script>
 	<script src="https://unpkg.com/react@15/dist/react.js"></script>
 	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-modal/1.6.5/react-modal.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-modal/1.7.7/react-modal.js" integrity="sha256-wQ9go2p9/RzvdqC0RzS2djz4aujaK10VA5UnV9A5eXI=" crossorigin="anonymous"></script>
 	<script src="bower_components/d3/d3.min.js"></script>
 	<script src="bower_components/lodash/lodash.js"></script>
 	<script src="bower_components/graphlib/dist/graphlib.core.js"></script>
@@ -36,7 +38,7 @@
 	<script type="text/jsx" src="explain.jsx"></script>
 	<script type="text/jsx" src="bulk.jsx"></script>
 	<script type="text/jsx" src="calc.jsx"></script>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script type="text/lua">
 		if #window.location.hash == 0 then
 			window.location.hash = '#' .. js.global.DEFAULT_LIB
@@ -47,7 +49,7 @@
 		require('dataloader')
 		require('data.'..datalib)
 		require('ffi')
-		
+
 		function js_get_data()
 			return to_js_val(get_data())
 		end
@@ -73,31 +75,6 @@
 		};
 		run();
 	</script>
-
-	<style>
-	/* This sets the color for "TK" nodes to a light blue green. */
-	g.type-TK > rect {
-	  fill: #00ffd0;
-	}
-
-	text {
-	  font-weight: 300;
-	  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
-	  font-size: 14px;
-	}
-
-	.node rect {
-	  stroke: #999;
-	  fill: #fff;
-	  stroke-width: 1.5px;
-	}
-
-	.edgePath path {
-	  stroke: #333;
-	  stroke-width: 1.5px;
-	}
-	</style>
-
 </head>
 <body>
 	<a href="https://github.com/rubyruy/factorio-calc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>

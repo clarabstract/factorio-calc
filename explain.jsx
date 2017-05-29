@@ -1,14 +1,12 @@
  /* global React,App,ReactModal*/
 
-App.Explain = React.createClass({
-
-    onRequestClose: function(event) {
+App.Explain = class Explain extends React.Component {
+    onRequestClose = (event) => {
       event.preventDefault();
       this.props.onRequestClose();
-    },
+    }
 
-    render: function() {
-
+    render() {
         var style = {
           content: {
             top: "100px",
@@ -59,15 +57,15 @@ App.Explain = React.createClass({
             } else {
               madeUnits = "items";
             }
-            
+
             var assemblyLinesExplanation = null;
             if (recipe.type != "fluid") {
                 assemblyLinesExplanation = [
-                  <div className="section"># Assembly Lines</div>,
-                  <div>
-                    One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production. 
+                  <div key="1" className="section"># Assembly Lines</div>,
+                  <div key="2">
+                    One lane of your chosen transport belt can transport only { decimalNumber(this.props.options.beltlvl * 60) } {madeUnits}/min. Since one { madeBySingular } produces at a rate of { decimalNumber(60 / recipe.assemblyTime) } {madeUnits}/min, if { wholeNumber(recipe.assemblersPerLine) } or more { madeByPlural } output onto the same belt, then the belt will back up, limiting production.
                   </div>,
-                  <div>
+                  <div key="3">
                     Since you need { wholeNumber(recipe.assemblersRequired) } { madeByPlural }, this means you will need { decimalNumber(recipe.lines) } separate belt lines, which in real life means { wholeNumber(recipe.lines) } belt lines.
                   </div>
                 ];
@@ -107,4 +105,4 @@ App.Explain = React.createClass({
           </ReactModal>
         );
     }
-});
+};
