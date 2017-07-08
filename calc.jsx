@@ -14,11 +14,12 @@ var Bulk = App.Bulk;
 
 class Calc extends React.Component {
   state = {
-    input: {recipe: "", ipm: 1 },
-    additionalInputs: [],
-    options: {
+    // Restore the inputs and options from persistent storage.
+    input:            JSON.parse(localStorage.getItem("input"))            || { recipe: "", ipm: 1 },
+    additionalInputs: JSON.parse(localStorage.getItem("additionalInputs")) || [],
+    options:          JSON.parse(localStorage.getItem("options"))          || {
       asslvl: "0.5",
-      smeltlvl: "1",
+      smeltlvl:"1",
       beltlvl: "5.7",
       difficulty: "normal",
       alwaysShowDecimals: false
@@ -37,6 +38,19 @@ class Calc extends React.Component {
     });
     var result = Calculator.calculateAndAnalyze(inputs, this.state.options);
     this.setState({result: result});
+
+    // Write the inputs and options to persistent storage.
+    localStorage.setItem("input",            JSON.stringify(this.state.input));
+    localStorage.setItem("additionalInputs", JSON.stringify(this.state.additionalInputs));
+    localStorage.setItem("options",          JSON.stringify(this.state.options));
+  }
+
+  getInputs() {
+    if (this.state.input.recipe) {
+      return _.union([this.state.input], this.state.additionalInputs);
+    } else {
+      return this.state.additionalInputs;
+    }
   }
 
   setInput = (input) => {
@@ -143,13 +157,5 @@ class Calc extends React.Component {
         <Bulk bulkVisible={this.state.bulkVisible} inputs={ this.getInputs() } onRequestClose={this.hideBulk} onImport={this.bulkImport} />
     </div>
     );
-  }
-
-  getInputs() {
-    if (this.state.input.recipe) {
-      return _.union([this.state.input], this.state.additionalInputs);
-    } else {
-      return this.state.additionalInputs;
-    }
   }
 };
