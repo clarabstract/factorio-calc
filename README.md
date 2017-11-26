@@ -3,6 +3,10 @@ factorio-calc
 
 For all your obsessive optimizing needs
 
+# Run the optimiser locally #
+
+`ruby serve-github-pages.rb`
+
 # Contribute a data source #
 
 Additional data sources are welcome - the calculator should work just fine with mods!
