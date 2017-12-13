@@ -17,11 +17,11 @@ class Calc extends React.Component {
     input: {recipe: "", ipm: 1 },
     additionalInputs: [],
     options: {
-      asslvl: "0.5",
-      smeltlvl: "1",
-      beltlvl: "5.7",
+      asslvl: "0.75",
+      smeltlvl: "2",
+      beltlvl: "13.33",
       difficulty: "normal",
-      alwaysShowDecimals: false
+      alwaysShowDecimals: true
     },
     explainingRecipe: null,
     bulkVisible: false

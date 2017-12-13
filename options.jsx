@@ -2,7 +2,7 @@
 
 App.Options = class Options extends React.Component {
   state = {
-    showOptions: false
+    showOptions: true
   }
 
   showOptions = (ev) =>  {
