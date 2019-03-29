@@ -112,7 +112,6 @@ App.Options = class Options extends React.Component {
             <span className="glyphicon glyphicon-expand"></span>
             Show options
           </a>
-
         </p>
       );
     }

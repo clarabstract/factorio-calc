@@ -10,5 +10,9 @@ require 'un'
 # Pass these values as command line arguments to httpd.
 ARGV.replace [File.expand_path('.', __dir__), '--port=8080']
 
+# Opens the GitHub Pages in the system default browser.
+# This has no effect when explorer.exe is not available, such as on Linux.
+system('explorer.exe', 'http://localhost:8080')
+
 # Start the http server.
 httpd
